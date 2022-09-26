@@ -1,0 +1,6 @@
+node_modules
+*.js
+/lib
+/src/*.json
+/src/__tests__/keys/*
+yarn.lock
