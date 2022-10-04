@@ -8,7 +8,11 @@
     "strict": true,
     "noImplicitAny": false,
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "lib": [
+      "es6",
+      "es2020.bigint"
+    ]
   },
   "include": ["src"],
   "exclude": ["node_modules", "**/__tests__/*"]

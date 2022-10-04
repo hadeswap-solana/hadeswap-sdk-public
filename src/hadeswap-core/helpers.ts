@@ -63,7 +63,7 @@ const parseRawAccount = (rawAccount: any) => {
   for (let key in copyRawAccount) {
     if (copyRawAccount[key] === null || copyRawAccount[key] === undefined) continue;
     if (copyRawAccount[key].toNumber) {
-      copyRawAccount[key] = copyRawAccount[key].toNumber();
+      copyRawAccount[key] = BigInt(copyRawAccount[key]);
     }
 
     if (copyRawAccount[key].toBase58) {
