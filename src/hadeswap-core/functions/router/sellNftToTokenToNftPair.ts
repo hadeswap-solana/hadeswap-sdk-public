@@ -3,7 +3,7 @@ import { ASSOCIATED_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@project-serum/anchor/d
 import { findAssociatedTokenAddress } from '../../../common';
 import { EMPTY_PUBKEY, ENCODER, NFTS_OWNER_PREFIX, METADATA_PROGRAM_PUBKEY, SOL_FUNDS_PREFIX } from '../../constants';
 
-import { getMetaplexMetadataPda, returnAnchorProgram } from '../../helpers';
+import { getMetaplexEditionPda, getMetaplexMetadataPda, returnAnchorProgram } from '../../helpers';
 
 type SellNftToTokenToNftPair = (params: {
   programId: web3.PublicKey;
@@ -44,7 +44,9 @@ export const sellNftToTokenToNftPair: SellNftToTokenToNftPair = async ({
     program.programId,
   );
 
-  const editionId = getMetaplexMetadataPda(accounts.nftMint);
+  const metadataInfo = getMetaplexMetadataPda(accounts.nftMint);
+  const editionInfo = getMetaplexEditionPda(accounts.nftMint);
+
   instructions.push(
     await program.methods
       .sellNftToTokenToNftPair(new BN(args.minAmountToGet), args.skipFailed)
@@ -55,10 +57,10 @@ export const sellNftToTokenToNftPair: SellNftToTokenToNftPair = async ({
         nftMint: accounts.nftMint,
         nftUserTokenAccount: userNftTokenAccount,
         tokenProgram: TOKEN_PROGRAM_ID,
-        editionInfo: editionId,
 
         assetReceiver: accounts.assetReceiver,
         protocolFeeReceiver: accounts.protocolFeeReceiver,
+
         assetReceiverTokenAccount: assetReceiverTokenAccount,
         associatedTokenProgram: ASSOCIATED_PROGRAM_ID,
 
@@ -66,6 +68,9 @@ export const sellNftToTokenToNftPair: SellNftToTokenToNftPair = async ({
 
         systemProgram: web3.SystemProgram.programId,
         rent: web3.SYSVAR_RENT_PUBKEY,
+
+        metadataInfo: metadataInfo,
+        editionInfo: editionInfo,
       })
       .instruction(),
   );

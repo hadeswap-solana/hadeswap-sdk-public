@@ -10,7 +10,12 @@ import {
   FEE_PREFIX,
 } from '../../constants';
 
-import { anchorRawBNsAndPubkeysToNumsAndStrings, getMetaplexMetadataPda, returnAnchorProgram } from '../../helpers';
+import {
+  anchorRawBNsAndPubkeysToNumsAndStrings,
+  getMetaplexEditionPda,
+  getMetaplexMetadataPda,
+  returnAnchorProgram,
+} from '../../helpers';
 
 type SellNftToLiquidityPair = (params: {
   programId: web3.PublicKey;
@@ -63,7 +68,8 @@ export const sellNftToLiquidityPair: SellNftToLiquidityPair = async ({
     program.programId,
   );
 
-  const editionId = getMetaplexMetadataPda(accounts.nftMint);
+  const metadataInfo = getMetaplexMetadataPda(accounts.nftMint);
+  const editionInfo = getMetaplexEditionPda(accounts.nftMint);
 
   instructions.push(
     await program.methods
@@ -74,9 +80,9 @@ export const sellNftToLiquidityPair: SellNftToLiquidityPair = async ({
         pair: accounts.pair,
         user: accounts.userPubkey,
         nftMint: accounts.nftMint,
+
         nftUserTokenAccount: userNftTokenAccount,
         tokenProgram: TOKEN_PROGRAM_ID,
-        editionInfo: editionId,
 
         nftsOwner: nftsOwner,
         feeSolVault: feeSolVault,
@@ -89,6 +95,9 @@ export const sellNftToLiquidityPair: SellNftToLiquidityPair = async ({
         systemProgram: web3.SystemProgram.programId,
         rent: web3.SYSVAR_RENT_PUBKEY,
         liquidityProvisionOrder: accounts.liquidityProvisionOrder,
+
+        metadataInfo: metadataInfo,
+        editionInfo: editionInfo,
       })
       .instruction(),
   );

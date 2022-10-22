@@ -4,14 +4,24 @@ import { getAllProgramAccounts } from '../hadeswap-core/functions/getters';
 import { calculatePricesArray } from '../hadeswap-core/helpers';
 import { BondingCurveType, OrderType, PairType } from '../hadeswap-core/types';
 import { hadeswap, anchor } from './../index';
+import { Metaplex } from '@metaplex-foundation/js';
+import { findAssociatedTokenAddress } from '../common';
+import { PublicKey } from '@solana/web3.js';
+
 // @ts-ignore
 jest.setTimeout(1000000000);
+
+const mainnetConnection = new anchor.web3.Connection(
+  'https://polished-fragrant-dawn.solana-mainnet.quiknode.pro/8005e8943672dd7c0a751fe88526a6cca7954072/',
+  'confirmed',
+);
+
 const devnetConnection =
   // mainnetConnection;
   new anchor.web3.Connection('https://api.devnet.solana.com', 'confirmed');
 
-const NEW_DEVNET_PROGRAM = new anchor.web3.PublicKey('21ASy6z4z2UhZ2HtbjWbaCdccjKmQHZ6mDSyjwB9HfZk');
-const MAINNET_PROGRAM = new anchor.web3.PublicKey('21ASy6z4z2UhZ2HtbjWbaCdccjKmQHZ6mDSyjwB9HfZk');
+const NEW_DEVNET_PROGRAM = new anchor.web3.PublicKey('hadeK9DLv9eA7ya5KCTqSvSvRZeJC3JgD5a9Y3CNbvu');
+const MAINNET_PROGRAM = new anchor.web3.PublicKey('hadeK9DLv9eA7ya5KCTqSvSvRZeJC3JgD5a9Y3CNbvu');
 // 6wPYbuGRXZjVw2tCeTxwRiQU7AzFDTeFEKuUFpJZpcix
 // @ts-ignore
 test('Examples', async () => {
@@ -42,7 +52,127 @@ test('Examples', async () => {
   // testCalculatePricesArray();
   // getStartingSpotPriceByCurrentAndDelta();
   // await getActivityScript();
+  // await getTradeActivitiesBySignaturesScript();
+  await testWhitelistScript();
+  // await isNftFrozen();
 });
+
+// const getAllNftsInY
+
+// const isNftFrozen = async () => {
+//   const tokenAccount = await findAssociatedTokenAddress(
+//     new PublicKey('GAHb7LbGXx41HEMHY46qDM65VmrXWYJjs5fPJU2iXzo5'),
+//     new PublicKey('DSZNCAF9Ea5cwCiJuegSD3HJTtKRM18CsS9FG35Fp1Ds'),
+//   );
+
+//   const tokenAccountInfo = await mainnetConnection.getParsedAccountInfo(tokenAccount, 'confirmed');
+//   console.log('tokenAccountInfo: ', (tokenAccountInfo.value?.data as any).parsed);
+// };
+
+const testWhitelistScript = async () => {
+  // new anchor.web3.PublicKey('DFsZgwKM3SvkvMwVRPQhhEnkYZCS1hZ2g2u6ehmAWjyc');
+  // console.log('userKeypair: ', userKeypair.publicKey.toBase58());
+  const fraktWhitelists = JSON.parse(await lazyFs().readFile(__dirname + '/whitelist.json', { encoding: 'utf8' }));
+
+  const allAccounts = await hadeswap.functions.getters.getAllProgramAccounts(MAINNET_PROGRAM, devnetConnection);
+  // console.log(allAccounts.hadoMarkets);
+  const validationWhitelists = allAccounts.classicValidationWhitelists;
+  // .filter(
+  //   (validationWhitelist) => validationWhitelist.whitelistedAddress == 'HTsPQeFWHonNy55xYzz1dpdhHBtwCSCoX19iuuJTjGz5',
+  // );
+  // .slice(1, 6);
+  // console.log(fraktWhitelists[0]);c
+
+  // console.log({ validationWhitelists });
+  const metaplex = new Metaplex(mainnetConnection);
+
+  let count = 0;
+  const notValidMarkets: any[] = [];
+  // for (let validationEntry of validationWhitelists) {
+  const fraktName = 'Taiyo Infants/Incubators';
+  // const whitelisted_mint = 'CLErvyrMpi66RAxNV2wveSi25NxHb8G383MSVuGDgZzp';
+  const hadoMarket = '941QWBMH3WS23T8zYxqE88ZNVAQSisdh4G2DCG34LCQ2';
+  const validationEntry = validationWhitelists.find((validation) => validation.hadoMarket === hadoMarket);
+  // const validationEntry = {
+  //   whitelistedAddress: new PublicKey('DRGNjvBvnXNiQz9dTppGk1tAsVxtJsvhEmojEfBU3ezf'),
+  //   hadoMarket: new PublicKey('9MynErYQ5Qi6obp4YwwdoDmXkZ1hYVtPUqYmJJ3rZ9Kn'),
+  // };
+  console.log('validationEntry: ', validationEntry);
+  console.log('validationEntry: ', validationEntry.whitelistedAddress, ', hadomarket: ', validationEntry.hadoMarket);
+  console.log('working through: ', count++);
+  // console.log('fetching nftsByCreator1...');
+  const fraktEntry = fraktWhitelists.find((whitelist) => whitelist.name === fraktName);
+  if (!fraktEntry) {
+    console.log('fraktEntry: ', fraktEntry);
+    return;
+  }
+
+  let nftsByCreator: any[] = [];
+  let position = 1;
+
+  while (position < 3) {
+    console.log('fetching nftsByCreator ' + position + ' ...');
+    const nftsByCreator1 = await metaplex
+      .nfts()
+      .findAllByCreator({ creator: validationEntry.whitelistedAddress, position })
+      .run();
+
+    nftsByCreator = nftsByCreator.concat(nftsByCreator1);
+    // console.log('fetching nftsByCreator2...');
+    // const nftsByCreator2 = await metaplex
+    //   .nfts()
+    //   .findAllByCreator({ creator: validationEntry.whitelistedAddress, position })
+    //   .run();
+    // nftsByCreator = nftsByCreator.concat(nftsByCreator2);
+    position++;
+  }
+  nftsByCreator = nftsByCreator.filter((nft) =>
+    nft.creators.find(
+      (creator) => creator.address.toBase58() === validationEntry.whitelistedAddress && creator.verified,
+    ),
+  );
+  console.log('nftsByCreator: ', nftsByCreator.length);
+  console.log('sample: ', nftsByCreator[102].mintAddress.toBase58());
+  console.log('sampleraw: ', nftsByCreator[102]);
+
+  console.log('finding fraktEntry...');
+
+  console.log('fraktEntry: ', fraktEntry.name);
+  console.log('fraktEntry whitelisted mints : ', fraktEntry.whitelisted_mints.length);
+
+  const notWhitelisted = nftsByCreator.filter(
+    (nft) => !fraktEntry.whitelisted_mints.includes(nft.mintAddress.toBase58()),
+  );
+  console.log('notWhitelisted: ', notWhitelisted.length);
+  const wrongFraktSide = fraktEntry.whitelisted_mints.filter(
+    (fraktMint) => !nftsByCreator.find((nft) => nft.mintAddress.toBase58() === fraktMint),
+  );
+  console.log('wrongFraktSide: ', wrongFraktSide);
+  if (notWhitelisted.length > 0 || nftsByCreator.length === 0) {
+    console.log(
+      'notWhitelisted sample: ',
+      notWhitelisted.map((nft) => nft.mintAddress.toBase58()),
+    );
+
+    console.log('notWhitelisted raws: ', notWhitelisted);
+
+    notValidMarkets.push(validationEntry);
+
+    await lazyFs().writeFile(
+      __dirname + '/not_valid_markets.json',
+      JSON.stringify(
+        notValidMarkets.map((market) => ({
+          ...market,
+          name: fraktEntry.name,
+          count: notWhitelisted.length,
+          nfts: notWhitelisted.length < 40 ? notWhitelisted : [],
+        })),
+      ),
+    );
+    console.log('THIS MARKET IS NOT WHITELISTED PROPERLY: ', validationEntry);
+  }
+  // }
+};
 
 const getStartingSpotPriceByCurrentAndDelta = () => {
   const current = 1 * 1e9;
@@ -134,10 +264,10 @@ const bruteforceSolAddress = () => {
 };
 
 const getTradeActivitiesBySignaturesScript = async () => {
-  const programId = new anchor.web3.PublicKey('DFsZgwKM3SvkvMwVRPQhhEnkYZCS1hZ2g2u6ehmAWjyc');
+  const programId = new anchor.web3.PublicKey(MAINNET_PROGRAM);
 
   const allActivity = await utils.getTradeActivitiesBySignatures({
-    signatures: ['127yn36siMSdvUJnH7s1iRNnCuq1143fRYxUb4Ax9hwfZXdpLuPEQQ8Svqh7krxTTvoUQNMnyhyLjQ732J1KunS7'],
+    signatures: ['5S1zG1Trwv8UKLvYhM9cVUQdj6cP2MZEjw8aSri6BDT5jj6VWWwiWRJskghs8cUZgWLtBnkpiyeeL3Agxwice5Hz'],
     connection: devnetConnection,
   });
   console.log(allActivity);
@@ -145,13 +275,12 @@ const getTradeActivitiesBySignaturesScript = async () => {
 
 // Make getActivityBySignature
 const getActivityScript = async () => {
-  const programId = new anchor.web3.PublicKey('DFsZgwKM3SvkvMwVRPQhhEnkYZCS1hZ2g2u6ehmAWjyc');
+  const programId = new anchor.web3.PublicKey(MAINNET_PROGRAM);
 
   const allActivity = await utils.getTradeActivities({
     programId,
-    //   fromThisSignature,
-    untilThisSignature: '127yn36siMSdvUJnH7s1iRNnCuq1143fRYxUb4Ax9hwfZXdpLuPEQQ8Svqh7krxTTvoUQNMnyhyLjQ732J1KunS7',
-    connection: devnetConnection,
+    untilThisSignature: '4TYeZjCUzZcLqe9LChU7XFLn48KVeKM5Wjo73ZyXCux2DrFAkaiFTCiLrDU8ezCqs7xEL9LGzkd87PCKJEhv1sgS',
+    connection: mainnetConnection,
   });
   console.log(allActivity);
 };
@@ -266,7 +395,9 @@ const getAllProgramAccountsScript = async () => {
   // console.log('userKeypair: ', userKeypair.publicKey.toBase58());
 
   const allAccounts = await hadeswap.functions.getters.getAllProgramAccounts(programId, devnetConnection);
-  console.log(allAccounts.hadoMarkets);
+  console.log(
+    allAccounts.nftSwapPairs.filter((pair) => pair.assetReceiver === '46bmoKVZzpAHJAqaAnjdbeNADeHNpXK5H7ocxYs1Zga1'),
+  );
 };
 
 const addToWhitelistToMarketScript = async () => {
@@ -281,6 +412,7 @@ const addToWhitelistToMarketScript = async () => {
   const hadoMarket = new anchor.web3.PublicKey('3jPjhb8Wco9hzifkw2DLfvo2QftST88xnh5riTmACWdp');
 
   const whitelisted_address = new anchor.web3.PublicKey('HMf3GQCYM7F55k37GwxfyPRmFyjHv28fJAcPxUtikDvq');
+
   const { account: whitelistPubkey } = await hadeswap.functions.marketFactory.hadoMarket.addClassicWhitelistToMarket({
     programId,
     connection: connection,
@@ -536,6 +668,50 @@ const depositLiquidityScript = async () => {
   });
 };
 
+const buyNftFromPairScript = async () => {
+  const userKeypair = await createKeypairFromFile(__dirname + '/keys/admin.json');
+  const sendTxnUserDevnet = async (txn, signers) =>
+    void (await devnetConnection.sendTransaction(txn, [userKeypair, ...signers]).catch((err) => console.log(err)));
+  const programId = new anchor.web3.PublicKey('DFsZgwKM3SvkvMwVRPQhhEnkYZCS1hZ2g2u6ehmAWjyc');
+  // console.log('userKeypair: ', userKeypair.publicKey.toBase58());
+  const allAccounts = await getAllProgramAccounts(programId, devnetConnection);
+
+  const pair = new anchor.web3.PublicKey('2awSi7caBi7exhA4PumXuF3eFV3qiBZa4J2AVfHXZUXk');
+
+  const pairAccount = allAccounts.nftSwapPairs.find((pairAcc) => pairAcc.publicKey === pair.toBase58());
+  const hadoMarket = new anchor.web3.PublicKey(pairAccount.hadoMarket);
+  const authorityAdapter = allAccounts.authorityAdapters.find(
+    (authority) => authority.authorityOwner === userKeypair.publicKey.toBase58() && authority.pair === pair.toBase58(),
+  ).publicKey;
+
+  const firstNftPairBox = allAccounts.nftPairBoxes.find((box) => box.nftBoxState === 'active');
+  const liquidityProvisionOrder = allAccounts.nftPairBoxes.find((box) => box.nftBoxState === 'active');
+
+  const nftValidationAdapter = allAccounts.nftValidationAdapters.find(
+    (validationAdapter) => validationAdapter.hadoMarket === hadoMarket.toBase58(),
+  ).publicKey;
+  const nftMint = firstNftPairBox.nftMint;
+
+  // await hadeswap.functions.router.buyNftFromPair({
+  //   programId,
+  //   connection: devnetConnection,
+  //   args: {
+  //     maxAmountToPay: 10 * 1e9,
+  //     skipFailed: true,
+  //   },
+  //   accounts: {
+  //     nftPairBox: new PublicKey(firstNftPairBox.publicKey),
+  //     vaultNftTokenAccount: new PublicKey(firstNftPairBox.vaultNftTokenAccount),
+  //     // nftValidationAdapter: nftValidationAdapter,
+  //     nftMint: new PublicKey(nftMint),
+  //     pair: pair,
+  //     userPubkey: userKeypair.publicKey,
+  //     liquidityProvisionOrder:
+  //   },
+  //   sendTxn: sendTxnUserDevnet,
+  // });
+};
+
 const depositNftToPairScript = async () => {
   const userKeypair = await createKeypairFromFile(__dirname + '/keys/admin.json');
   const sendTxnUserDevnet = async (txn, signers) =>
@@ -574,11 +750,11 @@ const depositNftToPairScript = async () => {
 const putPairOnMarketScript = async () => {
   const userKeypair = await createKeypairFromFile(__dirname + '/keys/admin.json');
   const sendTxnUserDevnet = async (txn, signers) =>
-    void (await devnetConnection.sendTransaction(txn, [userKeypair, ...signers]).catch((err) => console.log(err)));
-  const programId = NEW_DEVNET_PROGRAM;
+    void (await mainnetConnection.sendTransaction(txn, [userKeypair, ...signers]).catch((err) => console.log(err)));
+  const programId = MAINNET_PROGRAM;
   // \new anchor.web3.PublicKey('DFsZgwKM3SvkvMwVRPQhhEnkYZCS1hZ2g2u6ehmAWjyc');
   // console.log('userKeypair: ', userKeypair.publicKey.toBase58());
-  const allAccounts = await getAllProgramAccounts(programId, devnetConnection);
+  const allAccounts = await getAllProgramAccounts(programId, mainnetConnection);
 
   const pair = new anchor.web3.PublicKey('NxoovcU7NEdVWJuYi8NnuLxJobrEtFYxMUxkU9Vw4Wy');
   const authorityAdapter = allAccounts.authorityAdapters.find(
@@ -587,7 +763,7 @@ const putPairOnMarketScript = async () => {
 
   await hadeswap.functions.marketFactory.pair.virtual.mutations.putPairOnMarket({
     programId,
-    connection: devnetConnection,
+    connection: mainnetConnection,
     accounts: {
       pair: pair,
       authorityAdapter,

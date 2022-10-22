@@ -1,8 +1,6 @@
 {
   "name": "hadeswap-sdk-public",
-
-  "version": "0.0.1",
-
+  "version": "0.1.1",
   "description": "HadeSwap SDK for interacting with protocol",
   "keywords": [
     "Solana"
@@ -24,6 +22,7 @@
     "prepare": "cd .. && husky install hadeswap-sdk/.husky"
   },
   "dependencies": {
+    "@metaplex-foundation/js": "^0.17.2",
     "@project-serum/anchor": "0.24.2",
     "lodash": "^4.17.21"
   },

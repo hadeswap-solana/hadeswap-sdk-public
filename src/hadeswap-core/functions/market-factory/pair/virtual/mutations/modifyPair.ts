@@ -11,7 +11,7 @@ type ModifyPair = (params: {
 
   args: {
     delta: number;
-    spotPrice: number;
+    spotPrice: number; // starting spot price
     fee: number;
   };
 

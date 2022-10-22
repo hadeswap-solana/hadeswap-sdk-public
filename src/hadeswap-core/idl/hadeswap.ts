@@ -274,11 +274,6 @@ export type Hadeswap = {
           isSigner: false;
         },
         {
-          name: 'editionInfo';
-          isMut: false;
-          isSigner: false;
-        },
-        {
           name: 'metadataProgram';
           isMut: false;
           isSigner: false;
@@ -290,6 +285,16 @@ export type Hadeswap = {
         },
         {
           name: 'rent';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'metadataInfo';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'editionInfo';
           isMut: false;
           isSigner: false;
         },
@@ -474,11 +479,6 @@ export type Hadeswap = {
           isSigner: false;
         },
         {
-          name: 'editionInfo';
-          isMut: false;
-          isSigner: false;
-        },
-        {
           name: 'metadataProgram';
           isMut: false;
           isSigner: false;
@@ -490,6 +490,16 @@ export type Hadeswap = {
         },
         {
           name: 'rent';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'metadataInfo';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'editionInfo';
           isMut: false;
           isSigner: false;
         },
@@ -649,11 +659,6 @@ export type Hadeswap = {
           isSigner: false;
         },
         {
-          name: 'editionInfo';
-          isMut: false;
-          isSigner: false;
-        },
-        {
           name: 'assetReceiverTokenAccount';
           isMut: true;
           isSigner: false;
@@ -695,6 +700,16 @@ export type Hadeswap = {
         },
         {
           name: 'rent';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'metadataInfo';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'editionInfo';
           isMut: false;
           isSigner: false;
         },
@@ -755,11 +770,6 @@ export type Hadeswap = {
           isSigner: false;
         },
         {
-          name: 'editionInfo';
-          isMut: false;
-          isSigner: false;
-        },
-        {
           name: 'nftUserTokenAccount';
           isMut: true;
           isSigner: false;
@@ -797,6 +807,16 @@ export type Hadeswap = {
         {
           name: 'liquidityProvisionOrder';
           isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'metadataInfo';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'editionInfo';
+          isMut: false;
           isSigner: false;
         },
       ];
@@ -1634,6 +1654,48 @@ export type Hadeswap = {
         {
           name: 'associatedTokenProgram';
           isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'systemProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'rent';
+          isMut: false;
+          isSigner: false;
+        },
+      ];
+      args: [];
+      returns: undefined;
+    },
+    {
+      name: 'closeVirtualNftSwapPair';
+      accounts: [
+        {
+          name: 'pair';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'authorityAdapter';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'user';
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: 'fundsSolVault';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'feeSolVault';
+          isMut: true;
           isSigner: false;
         },
         {
@@ -2782,6 +2844,16 @@ export type Hadeswap = {
       name: 'LpTokenMintDoesntMatchOrder';
       msg: 'LpTokenMintDoesntMatchOrder';
     },
+    {
+      code: 6076;
+      name: 'CanCloseVirtualPoolOnlyIfNoLiquidityLeft';
+      msg: 'CanCloseVirtualPoolOnlyIfNoLiquidityLeft';
+    },
+    {
+      code: 6077;
+      name: 'NftIsNotMasterEdition';
+      msg: 'NftIsNotMasterEdition';
+    },
   ];
 };
 
@@ -3061,11 +3133,6 @@ export const IDL: Hadeswap = {
           isSigner: false,
         },
         {
-          name: 'editionInfo',
-          isMut: false,
-          isSigner: false,
-        },
-        {
           name: 'metadataProgram',
           isMut: false,
           isSigner: false,
@@ -3077,6 +3144,16 @@ export const IDL: Hadeswap = {
         },
         {
           name: 'rent',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'metadataInfo',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'editionInfo',
           isMut: false,
           isSigner: false,
         },
@@ -3261,11 +3338,6 @@ export const IDL: Hadeswap = {
           isSigner: false,
         },
         {
-          name: 'editionInfo',
-          isMut: false,
-          isSigner: false,
-        },
-        {
           name: 'metadataProgram',
           isMut: false,
           isSigner: false,
@@ -3277,6 +3349,16 @@ export const IDL: Hadeswap = {
         },
         {
           name: 'rent',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'metadataInfo',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'editionInfo',
           isMut: false,
           isSigner: false,
         },
@@ -3436,11 +3518,6 @@ export const IDL: Hadeswap = {
           isSigner: false,
         },
         {
-          name: 'editionInfo',
-          isMut: false,
-          isSigner: false,
-        },
-        {
           name: 'assetReceiverTokenAccount',
           isMut: true,
           isSigner: false,
@@ -3482,6 +3559,16 @@ export const IDL: Hadeswap = {
         },
         {
           name: 'rent',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'metadataInfo',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'editionInfo',
           isMut: false,
           isSigner: false,
         },
@@ -3542,11 +3629,6 @@ export const IDL: Hadeswap = {
           isSigner: false,
         },
         {
-          name: 'editionInfo',
-          isMut: false,
-          isSigner: false,
-        },
-        {
           name: 'nftUserTokenAccount',
           isMut: true,
           isSigner: false,
@@ -3584,6 +3666,16 @@ export const IDL: Hadeswap = {
         {
           name: 'liquidityProvisionOrder',
           isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'metadataInfo',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'editionInfo',
+          isMut: false,
           isSigner: false,
         },
       ],
@@ -4421,6 +4513,48 @@ export const IDL: Hadeswap = {
         {
           name: 'associatedTokenProgram',
           isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'systemProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'rent',
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [],
+      returns: undefined,
+    },
+    {
+      name: 'closeVirtualNftSwapPair',
+      accounts: [
+        {
+          name: 'pair',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'authorityAdapter',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'user',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'fundsSolVault',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'feeSolVault',
+          isMut: true,
           isSigner: false,
         },
         {
@@ -5568,6 +5702,16 @@ export const IDL: Hadeswap = {
       code: 6075,
       name: 'LpTokenMintDoesntMatchOrder',
       msg: 'LpTokenMintDoesntMatchOrder',
+    },
+    {
+      code: 6076,
+      name: 'CanCloseVirtualPoolOnlyIfNoLiquidityLeft',
+      msg: 'CanCloseVirtualPoolOnlyIfNoLiquidityLeft',
+    },
+    {
+      code: 6077,
+      name: 'NftIsNotMasterEdition',
+      msg: 'NftIsNotMasterEdition',
     },
   ],
 };

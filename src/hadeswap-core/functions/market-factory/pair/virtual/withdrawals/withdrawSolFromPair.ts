@@ -31,7 +31,10 @@ export const withdrawSolFromPair: WithdrawSolFromPair = async ({ programId, conn
   );
 
   const modifyComputeUnits = web3.ComputeBudgetProgram.setComputeUnitLimit({
-    units: Math.round(70000000 * (args.amountOfOrders / 10) + 1),
+    units: Math.round(
+      100000000,
+      // * (args.amountOfOrders / 10) + 1
+    ),
   });
   const addPriorityFee = web3.ComputeBudgetProgram.setComputeUnitPrice({
     microLamports: 1,

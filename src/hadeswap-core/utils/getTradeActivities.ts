@@ -135,6 +135,7 @@ const parseTransactionInfoToTradeActivities = async ({
     const currentSignature = tradeTxn.transaction.signatures[0];
     const blockTime = tradeTxn.blockTime;
 
+    if (!TRADE_TRANSACTION_PARSERS[currentLog]) continue;
     const parsedTradeActivity = await TRADE_TRANSACTION_PARSERS[currentLog]({
       innerInstruction: currentInnerInstruction,
       programInstruction: currentProgramInstruction,
@@ -199,13 +200,13 @@ const TRADE_TRANSACTION_PARSERS = {
     return {
       timestamp: blockTime,
       signature: signature,
-      pair: pair.toBase58(),
+      pair: pair ? pair.toBase58() : '',
       orderType: orderType,
       pairType: null,
-      nftMint: nftMint.toBase58(),
+      nftMint: nftMint ? nftMint.toBase58() : '',
       solAmount: solAmount,
-      userMaker: userMaker.toBase58(),
-      userTaker: userTaker.toBase58(),
+      userMaker: userMaker ? userMaker.toBase58() : '',
+      userTaker: userTaker ? userTaker.toBase58() : '',
     };
   },
   [TradeInstruction.SellNftToTokenToNftPair]: async ({
@@ -231,13 +232,13 @@ const TRADE_TRANSACTION_PARSERS = {
     return {
       timestamp: blockTime,
       signature: signature,
-      pair: pair.toBase58(),
+      pair: pair ? pair.toBase58() : '',
       orderType: orderType,
       pairType: PairType.TokenForNFT,
-      nftMint: nftMint.toBase58(),
+      nftMint: nftMint ? nftMint.toBase58() : '',
       solAmount: solAmount,
-      userMaker: userMaker.toBase58(),
-      userTaker: userTaker.toBase58(),
+      userMaker: userMaker ? userMaker.toBase58() : '',
+      userTaker: userTaker ? userTaker.toBase58() : '',
     };
   },
   [TradeInstruction.SellNftToLiquidityPair]: async ({
@@ -253,6 +254,7 @@ const TRADE_TRANSACTION_PARSERS = {
     blockTime: number;
     connection: web3.Connection;
   }): Promise<TradeActivity> => {
+    // try {
     const solAmount = getTransferAmountFromInnerInstructions(innerInstruction);
     const orderType = OrderType.Sell;
     const pair = programInstruction.accounts[1];
@@ -263,14 +265,15 @@ const TRADE_TRANSACTION_PARSERS = {
     return {
       timestamp: blockTime,
       signature: signature,
-      pair: pair.toBase58(),
+      pair: pair ? pair.toBase58() : '',
       orderType: orderType,
       pairType: PairType.LiquidityProvision,
-      nftMint: nftMint.toBase58(),
+      nftMint: nftMint ? nftMint.toBase58() : '',
       solAmount: solAmount,
       userMaker: null,
-      userTaker: userTaker.toBase58(),
+      userTaker: userTaker ? userTaker.toBase58() : '',
     };
+    // } catch(err) }
   },
 };
 

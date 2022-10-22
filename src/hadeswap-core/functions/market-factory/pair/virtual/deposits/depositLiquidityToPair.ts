@@ -9,7 +9,7 @@ import {
   SOL_FUNDS_PREFIX,
 } from '../../../../../constants';
 
-import { getMetaplexMetadataPda, returnAnchorProgram } from '../../../../../helpers';
+import { getMetaplexEditionPda, getMetaplexMetadataPda, returnAnchorProgram } from '../../../../../helpers';
 
 type DepositLiquidityToPair = (params: {
   programId: web3.PublicKey;
@@ -50,7 +50,8 @@ export const depositLiquidityToPair: DepositLiquidityToPair = async ({ programId
   const userNftTokenAccount = await findAssociatedTokenAddress(accounts.userPubkey, accounts.nftMint);
   const vaultNftTokenAccount = await findAssociatedTokenAddress(nftsOwner, accounts.nftMint);
 
-  const editionId = getMetaplexMetadataPda(accounts.nftMint);
+  const metadataInfo = getMetaplexMetadataPda(accounts.nftMint);
+  const editionInfo = getMetaplexEditionPda(accounts.nftMint);
 
   instructions.push(
     await program.methods
@@ -72,11 +73,13 @@ export const depositLiquidityToPair: DepositLiquidityToPair = async ({ programId
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_PROGRAM_ID,
 
-        editionInfo: editionId,
         metadataProgram: METADATA_PROGRAM_PUBKEY,
 
         systemProgram: web3.SystemProgram.programId,
         rent: web3.SYSVAR_RENT_PUBKEY,
+
+        metadataInfo: metadataInfo,
+        editionInfo: editionInfo,
       })
       .instruction(),
   );
