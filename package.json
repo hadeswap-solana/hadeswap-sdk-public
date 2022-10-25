@@ -1,44 +1,44 @@
 {
-  "name": "hadeswap-sdk-public",
-  "version": "0.1.1",
-  "description": "HadeSwap SDK for interacting with protocol",
-  "keywords": [
-    "Solana"
-  ],
-  "author": "Vedamir Efanov",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "files": [
-    "lib/**/*"
-  ],
-  "scripts": {
-    "build": "tsc",
-    "test": "jest --config jestconfig.json",
-    "format": "prettier --write \"src/**/*.ts\"",
-    "docs": "typedoc src/index.ts",
-    "minor": "npm version minor",
-    "patch": "npm version patch",
-    "publish_prerelease": "npm version prerelease --preid beta && npm run build && npm publish --tag beta",
-    "prepare": "cd .. && husky install hadeswap-sdk/.husky"
-  },
-  "dependencies": {
-    "@metaplex-foundation/js": "^0.17.2",
-    "@project-serum/anchor": "0.24.2",
-    "lodash": "^4.17.21"
-  },
-  "devDependencies": {
-    "@types/bn.js": "^4.11.6",
-    "@types/chai": "^4.3.1",
-    "@types/jest": "^27.4.1",
-    "@types/mz": "^2.7.4",
-    "@types/node": "^17.0.23",
-    "@types/text-encoding": "^0.0.36",
-    "chai": "^4.3.6",
-    "husky": "^8.0.1",
-    "jest": "^27.5.1",
-    "prettier": "^2.6.2",
-    "ts-jest": "^27.1.4",
-    "typedoc": "^0.22.16",
-    "typescript": "^4.6.3"
+    "name": "hadeswap-sdk-public",
+    "version": "0.1.2",
+    "description": "HadeSwap SDK for interacting with protocol",
+    "keywords": [
+      "Solana"
+    ],
+    "author": "Vedamir Efanov",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "files": [
+      "lib/**/*"
+    ],
+    "scripts": {
+      "build": "tsc",
+      "test": "jest --config jestconfig.json",
+      "format": "prettier --write \"src/**/*.ts\"",
+      "docs": "typedoc src/index.ts",
+      "minor": "npm version minor",
+      "patch": "npm version patch",
+      "publish_prerelease": "npm version prerelease --preid beta && npm run build && npm publish --tag beta",
+      "prepare": "cd .. && husky install hadeswap-sdk/.husky"
+    },
+    "dependencies": {
+      "@metaplex-foundation/js": "^0.17.2",
+      "@project-serum/anchor": "0.24.2",
+      "lodash": "^4.17.21"
+    },
+    "devDependencies": {
+      "@types/bn.js": "^4.11.6",
+      "@types/chai": "^4.3.1",
+      "@types/jest": "^27.4.1",
+      "@types/mz": "^2.7.4",
+      "@types/node": "^17.0.23",
+      "@types/text-encoding": "^0.0.36",
+      "chai": "^4.3.6",
+      "husky": "^8.0.1",
+      "jest": "^27.5.1",
+      "prettier": "^2.6.2",
+      "ts-jest": "^27.1.4",
+      "typedoc": "^0.22.16",
+      "typescript": "^4.6.3"
+    }
   }
-}
