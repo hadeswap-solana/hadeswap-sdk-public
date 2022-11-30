@@ -4,3 +4,4 @@ export * from './withdrawLiquidityFromSellOrdersPair';
 export * from './withdrawLiquidityOrderVirtualFees';
 export * from './withdrawNftFromPair';
 export * from './withdrawSolFromPair';
+export * from './withdrawVirtualFees';

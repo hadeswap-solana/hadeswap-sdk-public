@@ -617,11 +617,6 @@ export type Hadeswap = {
           isMut: false;
           isSigner: false;
         },
-        {
-          name: 'liquidityProvisionOrder';
-          isMut: true;
-          isSigner: false;
-        },
       ];
       args: [
         {
@@ -802,11 +797,6 @@ export type Hadeswap = {
         {
           name: 'rent';
           isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'liquidityProvisionOrder';
-          isMut: true;
           isSigner: false;
         },
         {
@@ -1707,6 +1697,77 @@ export type Hadeswap = {
           name: 'rent';
           isMut: false;
           isSigner: false;
+        },
+      ];
+      args: [];
+      returns: undefined;
+    },
+    {
+      name: 'withdrawVirtualFees';
+      accounts: [
+        {
+          name: 'pair';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'authorityAdapter';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'user';
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: 'feeSolVault';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'systemProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'rent';
+          isMut: false;
+          isSigner: false;
+        },
+      ];
+      args: [];
+      returns: undefined;
+    },
+    {
+      name: 'closeNftPairBox';
+      accounts: [
+        {
+          name: 'nftPairBox';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'admin';
+          isMut: true;
+          isSigner: true;
+        },
+      ];
+      args: [];
+      returns: undefined;
+    },
+    {
+      name: 'closeLiquidityProvisionOrder';
+      accounts: [
+        {
+          name: 'liquidityProvisionOrder';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'admin';
+          isMut: true;
+          isSigner: true;
         },
       ];
       args: [];
@@ -2854,6 +2915,16 @@ export type Hadeswap = {
       name: 'NftIsNotMasterEdition';
       msg: 'NftIsNotMasterEdition';
     },
+    {
+      code: 6078;
+      name: 'NftPairBoxNotClosed';
+      msg: 'NftPairBoxNotClosed';
+    },
+    {
+      code: 6079;
+      name: 'WrongAdmin';
+      msg: 'WrongAdmin';
+    },
   ];
 };
 
@@ -3476,11 +3547,6 @@ export const IDL: Hadeswap = {
           isMut: false,
           isSigner: false,
         },
-        {
-          name: 'liquidityProvisionOrder',
-          isMut: true,
-          isSigner: false,
-        },
       ],
       args: [
         {
@@ -3661,11 +3727,6 @@ export const IDL: Hadeswap = {
         {
           name: 'rent',
           isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'liquidityProvisionOrder',
-          isMut: true,
           isSigner: false,
         },
         {
@@ -4566,6 +4627,77 @@ export const IDL: Hadeswap = {
           name: 'rent',
           isMut: false,
           isSigner: false,
+        },
+      ],
+      args: [],
+      returns: undefined,
+    },
+    {
+      name: 'withdrawVirtualFees',
+      accounts: [
+        {
+          name: 'pair',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'authorityAdapter',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'user',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'feeSolVault',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'systemProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'rent',
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [],
+      returns: undefined,
+    },
+    {
+      name: 'closeNftPairBox',
+      accounts: [
+        {
+          name: 'nftPairBox',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'admin',
+          isMut: true,
+          isSigner: true,
+        },
+      ],
+      args: [],
+      returns: undefined,
+    },
+    {
+      name: 'closeLiquidityProvisionOrder',
+      accounts: [
+        {
+          name: 'liquidityProvisionOrder',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'admin',
+          isMut: true,
+          isSigner: true,
         },
       ],
       args: [],
@@ -5712,6 +5844,16 @@ export const IDL: Hadeswap = {
       code: 6077,
       name: 'NftIsNotMasterEdition',
       msg: 'NftIsNotMasterEdition',
+    },
+    {
+      code: 6078,
+      name: 'NftPairBoxNotClosed',
+      msg: 'NftPairBoxNotClosed',
+    },
+    {
+      code: 6079,
+      name: 'WrongAdmin',
+      msg: 'WrongAdmin',
     },
   ],
 };

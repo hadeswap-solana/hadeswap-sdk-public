@@ -3,13 +3,15 @@ import { OrderType, PairType } from '../types';
 
 export const getTradeActivities = async ({
   programId,
-  //   fromThisSignature,
+  fromThisSignature,
   untilThisSignature,
+  limit,
   connection,
 }: {
   programId: web3.PublicKey;
-  //   fromThisSignature?: string;
+  fromThisSignature?: string;
   untilThisSignature?: string;
+  limit?: number;
   connection: web3.Connection;
 }) => {
   const LIMIT = 100;
@@ -28,7 +30,7 @@ export const getTradeActivities = async ({
     programId,
     {
       limit: LIMIT,
-      before: currentLastSignature,
+      before: fromThisSignature || currentLastSignature,
       until: untilThisSignature,
     },
     'confirmed',
@@ -49,8 +51,18 @@ export const getTradeActivities = async ({
     );
     currentLastSignature = newSignatureInfosLatestToPast[newSignatureInfosLatestToPast.length - 1].signature;
 
-    allSignaturesInfos = [...allSignaturesInfos, ...newSignatureInfosLatestToPast];
+    allSignaturesInfos = [...allSignaturesInfos, ...newSignatureInfosLatestToPast].filter(
+      (signatureInfo) => !signatureInfo.err,
+    );
+    console.log('last signature of length: ', allSignaturesInfos.length);
+
+    if (limit !== undefined && allSignaturesInfos.length >= limit) {
+      break;
+    }
   }
+  // allSignaturesInfos = allSignaturesInfos.filter((signatureInfo) => !signatureInfo.err);
+  // console.log('last signature of 2000: ', allSignaturesInfos[allSignaturesInfos.length - 1]);
+  console.log('last signature of length: ', allSignaturesInfos.length);
 
   const tradeTransactions: web3.ParsedTransactionWithMeta[] = await getTradeTransactionsFromSignatures({
     signatures: allSignaturesInfos.map((signatureInfo) => signatureInfo.signature),
@@ -58,7 +70,6 @@ export const getTradeActivities = async ({
   });
 
   let allTradeActivities: TradeActivity[] = [];
-  //   console.log('tradeTransactions: ', tradeTransactions.length);
   for (let tradeTxn of tradeTransactions) {
     const tradeActivities = await parseTransactionInfoToTradeActivities({ tradeTxn, connection });
     allTradeActivities = [...allTradeActivities, ...tradeActivities];
@@ -96,13 +107,22 @@ export const getTradeTransactionsFromSignatures = async ({
   connection: web3.Connection;
 }): Promise<web3.ParsedTransactionWithMeta[]> => {
   const tradeTransactions: web3.ParsedTransactionWithMeta[] = [];
+  let count = 0;
   for (let signature of signatures) {
-    const currentTransactionInfo: web3.ParsedTransactionWithMeta | null = await connection.getParsedTransaction(
-      signature,
-      'confirmed',
-    );
-    if (!currentTransactionInfo || !isTradeTransactionInfo(currentTransactionInfo as any)) continue;
-    tradeTransactions.push(currentTransactionInfo as any);
+    console.log('processing signature: ', count++, ', of ', signatures.length);
+    try {
+      const currentTransactionInfo: web3.ParsedTransactionWithMeta | null = await connection.getParsedTransaction(
+        signature,
+        'confirmed',
+      );
+
+      if (!currentTransactionInfo || !isTradeTransactionInfo(currentTransactionInfo as any)) {
+        continue;
+      }
+      tradeTransactions.push(currentTransactionInfo as any);
+    } catch (err) {
+      console.log(err);
+    }
   }
   return tradeTransactions;
 };
@@ -118,15 +138,13 @@ const parseTransactionInfoToTradeActivities = async ({
   tradeTxn: web3.ParsedTransactionWithMeta;
   connection: web3.Connection;
 }): Promise<TradeActivity[]> => {
-  //   console.log(currentTransactionInfo);
   const tradeLogs: string[] = tradeTxn.meta?.logMessages?.reduce(
     (tradeLogs, log) => (isTradeInstructionLog(log) ? [...tradeLogs, log] : tradeLogs),
     [] as string[],
   ) as any;
+
   const innerInstructions: web3.ParsedInnerInstruction[] = tradeTxn.meta?.innerInstructions as any;
-  //   console.log('innerInstructions: ', innerInstructions.length);
   const programInstructions: web3.PartiallyDecodedInstruction[] = tradeTxn.transaction.message.instructions as any;
-  //   console.log('programInstructions: ', innerInstructions.length);
   const tradeActivities: TradeActivity[] = [];
   for (let i = 0; i < innerInstructions.length; i++) {
     const currentInnerInstruction = innerInstructions[i];

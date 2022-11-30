@@ -6,6 +6,7 @@ import { createFakeWallet } from '../common';
 import { BASE_POINTS, EDITION_PREFIX, METADATA_PREFIX, METADATA_PROGRAM_PUBKEY } from './constants';
 
 import { BondingCurveType, OrderType } from './types';
+import { PublicKey } from '@solana/web3.js';
 
 type ReturnAnchorProgram = (programId: web3.PublicKey, connection: web3.Connection) => Program<Hadeswap>;
 export const returnAnchorProgram: ReturnAnchorProgram = (programId, connection) =>
@@ -52,7 +53,7 @@ export const getMetaplexMetadataPda: GetMetaplexMetadataPda = (mintPubkey) => {
   return metaPda[0];
 };
 
-export const anchorRawBNsAndPubkeysToNumsAndStrings = (rawAccount: any) => {
+export const anchorRawBNsAndPubkeysToNumsAndStrings = (rawAccount: { account: any; publicKey: PublicKey }) => {
   const copyRawAccount = { ...rawAccount };
   const newAccount = parseRawAccount(rawAccount.account);
   return { ...newAccount, publicKey: copyRawAccount.publicKey.toBase58() };

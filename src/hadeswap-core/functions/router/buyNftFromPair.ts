@@ -23,8 +23,6 @@ type BuyNftFromPair = (params: {
 
     pair: web3.PublicKey;
     userPubkey: web3.PublicKey;
-
-    liquidityProvisionOrder?: web3.PublicKey;
   };
 
   sendTxn: (transaction: web3.Transaction, signers: web3.Signer[]) => Promise<void>;
@@ -75,9 +73,6 @@ export const buyNftFromPair: BuyNftFromPair = async ({ programId, connection, ac
 
         systemProgram: web3.SystemProgram.programId,
         rent: web3.SYSVAR_RENT_PUBKEY,
-
-        liquidityProvisionOrder:
-          accounts.liquidityProvisionOrder !== undefined ? accounts.liquidityProvisionOrder : nftsOwner,
       })
       .instruction(),
   );

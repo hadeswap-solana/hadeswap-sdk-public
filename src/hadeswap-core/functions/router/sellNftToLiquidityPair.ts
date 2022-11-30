@@ -33,8 +33,6 @@ type SellNftToLiquidityPair = (params: {
     nftMint: web3.PublicKey;
     protocolFeeReceiver: web3.PublicKey;
     assetReceiver: web3.PublicKey;
-
-    liquidityProvisionOrder: web3.PublicKey;
   };
 
   sendTxn: (transaction: web3.Transaction, signers: web3.Signer[]) => Promise<void>;
@@ -94,7 +92,6 @@ export const sellNftToLiquidityPair: SellNftToLiquidityPair = async ({
 
         systemProgram: web3.SystemProgram.programId,
         rent: web3.SYSVAR_RENT_PUBKEY,
-        liquidityProvisionOrder: accounts.liquidityProvisionOrder,
 
         metadataInfo: metadataInfo,
         editionInfo: editionInfo,
