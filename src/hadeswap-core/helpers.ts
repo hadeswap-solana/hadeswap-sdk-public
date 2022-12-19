@@ -114,6 +114,12 @@ export const calculateNextSpotPrice = ({
     let newDelta = newCounter > 0 ? (delta + 1e4) / 1e4 : 1 / ((delta + 1e4) / 1e4);
 
     return spotPrice * Math.pow(newDelta, Math.abs(newCounter));
+  } else if (bondingCurveType === BondingCurveType.XYK) {
+    const currentDelta = delta - counter;
+    const diffAmount = (counter * spotPrice) / currentDelta;
+    const newSpotPrice = spotPrice + diffAmount;
+
+    return orderType === OrderType.Buy ? newSpotPrice / (currentDelta - 1) : newSpotPrice / (currentDelta + 1);
   }
   return 0;
 };

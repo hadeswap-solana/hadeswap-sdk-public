@@ -25,9 +25,6 @@ type WithdrawLiquidityFromSellOrdersPair = (params: {
     nftPairBoxFirst: web3.PublicKey;
     nftMintSecond: web3.PublicKey;
     nftPairBoxSecond: web3.PublicKey;
-
-    liquidityProvisionOrderToWithdraw: web3.PublicKey;
-    liquidityProvisionOrderToReplace: web3.PublicKey;
   };
 
   sendTxn: (transaction: web3.Transaction, signers: web3.Signer[]) => Promise<void>;
@@ -67,9 +64,6 @@ export const withdrawLiquidityFromSellOrdersPair: WithdrawLiquidityFromSellOrder
     await program.methods
       .withdrawLiquidityFromSellOrdersPair()
       .accounts({
-        liquidityProvisionOrderToWithdraw: accounts.liquidityProvisionOrderToWithdraw,
-        liquidityProvisionOrderToReplace: accounts.liquidityProvisionOrderToReplace,
-
         pair: accounts.pair,
         authorityAdapter: accounts.authorityAdapter,
         user: accounts.userPubkey,

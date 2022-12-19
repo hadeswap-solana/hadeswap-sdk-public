@@ -117,7 +117,7 @@ export const onAccountsChange = async ({
           await new Promise((f) => setTimeout(f, 100));
           continue;
         }
-        if (!currentTransactionInfo.meta) {
+        if (!currentTransactionInfo.meta || currentTransactionInfo.meta.err !== null) {
           // lastSignature = signatureInfo.signature;
           // const latestConfirmedSignatures = await connection.getConfirmedSignaturesForAddress2(programId, {
           //   limit: 1,

@@ -22,8 +22,6 @@ type WithdrawLiquidityFromBalancedPair = (params: {
     userPubkey: web3.PublicKey;
     nftMint: web3.PublicKey;
     nftPairBox: web3.PublicKey;
-    liquidityProvisionOrderToWithdraw: web3.PublicKey;
-    liquidityProvisionOrderToReplace: web3.PublicKey;
   };
 
   sendTxn: (transaction: web3.Transaction, signers: web3.Signer[]) => Promise<void>;
@@ -61,9 +59,6 @@ export const withdrawLiquidityFromBalancedPair: WithdrawLiquidityFromBalancedPai
     await program.methods
       .withdrawLiquidityFromBalancedPair()
       .accounts({
-        liquidityProvisionOrderToWithdraw: accounts.liquidityProvisionOrderToWithdraw,
-        liquidityProvisionOrderToReplace: accounts.liquidityProvisionOrderToReplace,
-
         nftPairBox: accounts.nftPairBox,
         pair: accounts.pair,
         authorityAdapter: accounts.authorityAdapter,

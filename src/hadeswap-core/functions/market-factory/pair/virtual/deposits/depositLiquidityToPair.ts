@@ -26,7 +26,6 @@ type DepositLiquidityToPair = (params: {
   sendTxn: (transaction: web3.Transaction, signers: web3.Signer[]) => Promise<void>;
 }) => Promise<{
   nftPairBox: web3.PublicKey;
-  liquidityProvisionOrder: web3.PublicKey;
   instructions: web3.TransactionInstruction[];
   signers: web3.Signer[];
 }>;
@@ -45,7 +44,6 @@ export const depositLiquidityToPair: DepositLiquidityToPair = async ({ programId
   );
 
   const nftPairBox = web3.Keypair.generate();
-  const liquidityProvisionOrder = web3.Keypair.generate();
 
   const userNftTokenAccount = await findAssociatedTokenAddress(accounts.userPubkey, accounts.nftMint);
   const vaultNftTokenAccount = await findAssociatedTokenAddress(nftsOwner, accounts.nftMint);
@@ -57,7 +55,6 @@ export const depositLiquidityToPair: DepositLiquidityToPair = async ({ programId
     await program.methods
       .depositLiquidityToPair()
       .accounts({
-        liquidityProvisionOrder: liquidityProvisionOrder.publicKey,
         nftPairBox: nftPairBox.publicKey,
         nftValidationAdapter: accounts.nftValidationAdapter,
         pair: accounts.pair,
@@ -86,11 +83,10 @@ export const depositLiquidityToPair: DepositLiquidityToPair = async ({ programId
   const transaction = new web3.Transaction();
   for (let instruction of instructions) transaction.add(instruction);
 
-  const signers = [nftPairBox, liquidityProvisionOrder];
+  const signers = [nftPairBox];
   await sendTxn(transaction, signers);
   return {
     nftPairBox: nftPairBox.publicKey,
-    liquidityProvisionOrder: liquidityProvisionOrder.publicKey,
     instructions,
     signers,
   };

@@ -414,11 +414,6 @@ export type Hadeswap = {
       name: 'depositLiquidityToPair';
       accounts: [
         {
-          name: 'liquidityProvisionOrder';
-          isMut: true;
-          isSigner: true;
-        },
-        {
           name: 'nftPairBox';
           isMut: true;
           isSigner: true;
@@ -935,16 +930,6 @@ export type Hadeswap = {
       name: 'withdrawLiquidityFromBalancedPair';
       accounts: [
         {
-          name: 'liquidityProvisionOrderToWithdraw';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'liquidityProvisionOrderToReplace';
-          isMut: true;
-          isSigner: false;
-        },
-        {
           name: 'nftPairBox';
           isMut: true;
           isSigner: false;
@@ -1066,16 +1051,6 @@ export type Hadeswap = {
       name: 'withdrawLiquidityFromBuyOrdersPair';
       accounts: [
         {
-          name: 'liquidityProvisionOrderToWithdraw';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'liquidityProvisionOrderToReplace';
-          isMut: true;
-          isSigner: false;
-        },
-        {
           name: 'authorityAdapter';
           isMut: false;
           isSigner: false;
@@ -1117,16 +1092,6 @@ export type Hadeswap = {
     {
       name: 'withdrawLiquidityFromSellOrdersPair';
       accounts: [
-        {
-          name: 'liquidityProvisionOrderToWithdraw';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'liquidityProvisionOrderToReplace';
-          isMut: true;
-          isSigner: false;
-        },
         {
           name: 'nftPairBoxFirst';
           isMut: true;
@@ -1768,6 +1733,96 @@ export type Hadeswap = {
           name: 'admin';
           isMut: true;
           isSigner: true;
+        },
+      ];
+      args: [];
+      returns: undefined;
+    },
+    {
+      name: 'customValidateNft';
+      accounts: [
+        {
+          name: 'nftValidationAdapter';
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: 'hadoMarket';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'pair';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'whitelistedAddress';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'user';
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: 'adapterProgramSigner';
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: 'systemProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'rent';
+          isMut: false;
+          isSigner: false;
+        },
+      ];
+      args: [
+        {
+          name: 'duration';
+          type: 'u64';
+        },
+        {
+          name: 'nftValidationWhitelistType';
+          type: {
+            defined: 'NftValidationWhitelistType';
+          };
+        },
+      ];
+      returns: undefined;
+    },
+    {
+      name: 'modifyHadoMarket';
+      accounts: [
+        {
+          name: 'hadoMarket';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'user';
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: 'validationAdapterProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'systemProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'rent';
+          isMut: false;
+          isSigner: false;
         },
       ];
       args: [];
@@ -2925,6 +2980,16 @@ export type Hadeswap = {
       name: 'WrongAdmin';
       msg: 'WrongAdmin';
     },
+    {
+      code: 6080;
+      name: 'PairScopeValidationNotSupportedForNow';
+      msg: 'PairScopeValidationNotSupportedForNow';
+    },
+    {
+      code: 6081;
+      name: 'CustomValidationAdapterProgramDoesntMatchUser';
+      msg: 'CustomValidationAdapterProgramDoesntMatchUser';
+    },
   ];
 };
 
@@ -3343,11 +3408,6 @@ export const IDL: Hadeswap = {
     {
       name: 'depositLiquidityToPair',
       accounts: [
-        {
-          name: 'liquidityProvisionOrder',
-          isMut: true,
-          isSigner: true,
-        },
         {
           name: 'nftPairBox',
           isMut: true,
@@ -3865,16 +3925,6 @@ export const IDL: Hadeswap = {
       name: 'withdrawLiquidityFromBalancedPair',
       accounts: [
         {
-          name: 'liquidityProvisionOrderToWithdraw',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'liquidityProvisionOrderToReplace',
-          isMut: true,
-          isSigner: false,
-        },
-        {
           name: 'nftPairBox',
           isMut: true,
           isSigner: false,
@@ -3996,16 +4046,6 @@ export const IDL: Hadeswap = {
       name: 'withdrawLiquidityFromBuyOrdersPair',
       accounts: [
         {
-          name: 'liquidityProvisionOrderToWithdraw',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'liquidityProvisionOrderToReplace',
-          isMut: true,
-          isSigner: false,
-        },
-        {
           name: 'authorityAdapter',
           isMut: false,
           isSigner: false,
@@ -4047,16 +4087,6 @@ export const IDL: Hadeswap = {
     {
       name: 'withdrawLiquidityFromSellOrdersPair',
       accounts: [
-        {
-          name: 'liquidityProvisionOrderToWithdraw',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'liquidityProvisionOrderToReplace',
-          isMut: true,
-          isSigner: false,
-        },
         {
           name: 'nftPairBoxFirst',
           isMut: true,
@@ -4698,6 +4728,96 @@ export const IDL: Hadeswap = {
           name: 'admin',
           isMut: true,
           isSigner: true,
+        },
+      ],
+      args: [],
+      returns: undefined,
+    },
+    {
+      name: 'customValidateNft',
+      accounts: [
+        {
+          name: 'nftValidationAdapter',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'hadoMarket',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'pair',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'whitelistedAddress',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'user',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'adapterProgramSigner',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'systemProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'rent',
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: 'duration',
+          type: 'u64',
+        },
+        {
+          name: 'nftValidationWhitelistType',
+          type: {
+            defined: 'NftValidationWhitelistType',
+          },
+        },
+      ],
+      returns: undefined,
+    },
+    {
+      name: 'modifyHadoMarket',
+      accounts: [
+        {
+          name: 'hadoMarket',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'user',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'validationAdapterProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'systemProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'rent',
+          isMut: false,
+          isSigner: false,
         },
       ],
       args: [],
@@ -5854,6 +5974,16 @@ export const IDL: Hadeswap = {
       code: 6079,
       name: 'WrongAdmin',
       msg: 'WrongAdmin',
+    },
+    {
+      code: 6080,
+      name: 'PairScopeValidationNotSupportedForNow',
+      msg: 'PairScopeValidationNotSupportedForNow',
+    },
+    {
+      code: 6081,
+      name: 'CustomValidationAdapterProgramDoesntMatchUser',
+      msg: 'CustomValidationAdapterProgramDoesntMatchUser',
     },
   ],
 };

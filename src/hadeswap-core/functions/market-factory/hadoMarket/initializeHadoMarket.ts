@@ -10,6 +10,7 @@ type InitializeHadoMarket = (params: {
 
   accounts: {
     userPubkey: web3.PublicKey;
+    validationAdapterProgram: web3.PublicKey;
   };
 
   sendTxn: (transaction: web3.Transaction, signers: web3.Signer[]) => Promise<void>;
@@ -27,7 +28,7 @@ export const initializeHadoMarket: InitializeHadoMarket = async ({ programId, co
         hadoMarket: hadoMarket.publicKey,
         user: accounts.userPubkey,
 
-        validationAdapterProgram: programId,
+        validationAdapterProgram: accounts.validationAdapterProgram,
         pairTokenMint: EMPTY_PUBKEY,
 
         systemProgram: web3.SystemProgram.programId,

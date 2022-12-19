@@ -7,12 +7,13 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const pairPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const pair = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftSwapPair.fetch(pairPubkey, 'confirmed'),
+      account: await program.account.nftSwapPair.fetch(pairPubkey, 'finalized'),
       publicKey: pairPubkey,
     });
     // await fetchAndParseLoan({
@@ -40,12 +41,13 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const authorityAdapterPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const authorityAdapter = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.authorityAdapter.fetch(authorityAdapterPubkey, 'confirmed'),
+      account: await program.account.authorityAdapter.fetch(authorityAdapterPubkey, 'finalized'),
       publicKey: authorityAdapterPubkey,
     });
     // await fetchAndParseLoan({
@@ -74,12 +76,13 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const pairPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const pair = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftSwapPair.fetch(pairPubkey, 'confirmed'),
+      account: await program.account.nftSwapPair.fetch(pairPubkey, 'finalized'),
       publicKey: pairPubkey,
     });
 
@@ -103,12 +106,13 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const nftValidationAdapterPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const nftValidationAdapter = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftValidationAdapter.fetch(nftValidationAdapterPubkey, 'confirmed'),
+      account: await program.account.nftValidationAdapter.fetch(nftValidationAdapterPubkey, 'finalized'),
       publicKey: nftValidationAdapterPubkey,
     });
 
@@ -132,17 +136,18 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const nftPairBoxPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const nftPairBox = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftPairBox.fetch(nftPairBoxPubkey, 'confirmed'),
+      account: await program.account.nftPairBox.fetch(nftPairBoxPubkey, 'finalized'),
       publicKey: nftPairBoxPubkey,
     });
     const pairPubkey = (transaction.transaction.message.instructions[0] as any).accounts[1];
     const pair = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftSwapPair.fetch(pairPubkey, 'confirmed'),
+      account: await program.account.nftSwapPair.fetch(pairPubkey, 'finalized'),
       publicKey: pairPubkey,
     });
     // await fetchAndParseLoan({
@@ -171,12 +176,13 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const hadoMarketPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const hadoMarket = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.hadoMarket.fetch(hadoMarketPubkey, 'confirmed'),
+      account: await program.account.hadoMarket.fetch(hadoMarketPubkey, 'finalized'),
       publicKey: hadoMarketPubkey,
     });
 
@@ -206,12 +212,13 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const hadoMarketPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const hadoMarket = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.hadoMarket.fetch(hadoMarketPubkey, 'confirmed'),
+      account: await program.account.hadoMarket.fetch(hadoMarketPubkey, 'finalized'),
       publicKey: hadoMarketPubkey,
     });
 
@@ -241,12 +248,13 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const classicValidationWhitelistPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const classicValidationWhitelist = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.classicValidationWhitelist.fetch(classicValidationWhitelistPubkey, 'confirmed'),
+      account: await program.account.classicValidationWhitelist.fetch(classicValidationWhitelistPubkey, 'finalized'),
       publicKey: classicValidationWhitelistPubkey,
     });
 
@@ -276,24 +284,25 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const liquidityProvisionOrderPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const liquidityProvisionOrder = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.liquidityProvisionOrder.fetch(liquidityProvisionOrderPubkey, 'confirmed'),
+      account: await program.account.liquidityProvisionOrder.fetch(liquidityProvisionOrderPubkey, 'finalized'),
       publicKey: liquidityProvisionOrderPubkey,
     });
 
     const nftPairBoxPubkey = (transaction.transaction.message.instructions[0] as any).accounts[1];
     const nftPairBox = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftPairBox.fetch(nftPairBoxPubkey, 'confirmed'),
+      account: await program.account.nftPairBox.fetch(nftPairBoxPubkey, 'finalized'),
       publicKey: nftPairBoxPubkey,
     });
 
     const pairPubkey = (transaction.transaction.message.instructions[0] as any).accounts[2];
     const pair = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftSwapPair.fetch(pairPubkey, 'confirmed'),
+      account: await program.account.nftSwapPair.fetch(pairPubkey, 'finalized'),
       publicKey: pairPubkey,
     });
 
@@ -323,12 +332,13 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const pairPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const pair = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftSwapPair.fetch(pairPubkey, 'confirmed'),
+      account: await program.account.nftSwapPair.fetch(pairPubkey, 'finalized'),
       publicKey: pairPubkey,
     });
 
@@ -352,17 +362,18 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const nftPairBoxPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const nftPairBox = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftPairBox.fetch(nftPairBoxPubkey, 'confirmed'),
+      account: await program.account.nftPairBox.fetch(nftPairBoxPubkey, 'finalized'),
       publicKey: nftPairBoxPubkey,
     });
     const pairPubkey = (transaction.transaction.message.instructions[0] as any).accounts[1];
     const pair = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftSwapPair.fetch(pairPubkey, 'confirmed'),
+      account: await program.account.nftSwapPair.fetch(pairPubkey, 'finalized'),
       publicKey: pairPubkey,
     });
 
@@ -386,12 +397,13 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const pairPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const pair = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftSwapPair.fetch(pairPubkey, 'confirmed'),
+      account: await program.account.nftSwapPair.fetch(pairPubkey, 'finalized'),
       publicKey: pairPubkey,
     });
 
@@ -415,16 +427,17 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
     const nftPairBoxPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const nftPairBox = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftPairBox.fetch(nftPairBoxPubkey, 'confirmed'),
+      account: await program.account.nftPairBox.fetch(nftPairBoxPubkey, 'finalized'),
       publicKey: nftPairBoxPubkey,
     });
     const pairPubkey = (transaction.transaction.message.instructions[0] as any).accounts[1];
     const pair = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftSwapPair.fetch(pairPubkey, 'confirmed'),
+      account: await program.account.nftSwapPair.fetch(pairPubkey, 'finalized'),
       publicKey: pairPubkey,
     });
 
@@ -448,12 +461,13 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const pairPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const pair = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftSwapPair.fetch(pairPubkey, 'confirmed'),
+      account: await program.account.nftSwapPair.fetch(pairPubkey, 'finalized'),
       publicKey: pairPubkey,
     });
 
@@ -477,18 +491,19 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const nftPairBoxPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const nftPairBox = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftPairBox.fetch(nftPairBoxPubkey, 'confirmed'),
+      account: await program.account.nftPairBox.fetch(nftPairBoxPubkey, 'finalized'),
       publicKey: nftPairBoxPubkey,
     });
 
     const pairPubkey = (transaction.transaction.message.instructions[0] as any).accounts[2];
     const pair = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftSwapPair.fetch(pairPubkey, 'confirmed'),
+      account: await program.account.nftSwapPair.fetch(pairPubkey, 'finalized'),
       publicKey: pairPubkey,
     });
 
@@ -512,6 +527,7 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
@@ -519,19 +535,19 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
 
     const pairPubkey = (transaction.transaction.message.instructions[0] as any).accounts[4];
     const pair = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftSwapPair.fetch(pairPubkey, 'confirmed'),
+      account: await program.account.nftSwapPair.fetch(pairPubkey, 'finalized'),
       publicKey: pairPubkey,
     });
 
     const liquidityProvisionOrderPubkeyFirst = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const liquidityProvisionOrderFirst = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.liquidityProvisionOrder.fetch(liquidityProvisionOrderPubkeyFirst, 'confirmed'),
+      account: await program.account.liquidityProvisionOrder.fetch(liquidityProvisionOrderPubkeyFirst, 'finalized'),
       publicKey: liquidityProvisionOrderPubkeyFirst,
     });
 
     const liquidityProvisionOrderPubkeySecond = (transaction.transaction.message.instructions[0] as any).accounts[1];
     const liquidityProvisionOrderSecond = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.liquidityProvisionOrder.fetch(liquidityProvisionOrderPubkeySecond, 'confirmed'),
+      account: await program.account.liquidityProvisionOrder.fetch(liquidityProvisionOrderPubkeySecond, 'finalized'),
       publicKey: liquidityProvisionOrderPubkeySecond,
     });
 
@@ -555,12 +571,13 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const pairPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const pair = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftSwapPair.fetch(pairPubkey, 'confirmed'),
+      account: await program.account.nftSwapPair.fetch(pairPubkey, 'finalized'),
       publicKey: pairPubkey,
     });
 
@@ -584,24 +601,25 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const pairPubkey = (transaction.transaction.message.instructions[0] as any).accounts[3];
     const pair = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftSwapPair.fetch(pairPubkey, 'confirmed'),
+      account: await program.account.nftSwapPair.fetch(pairPubkey, 'finalized'),
       publicKey: pairPubkey,
     });
 
     const liquidityProvisionOrderPubkeyFirst = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const liquidityProvisionOrderFirst = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.liquidityProvisionOrder.fetch(liquidityProvisionOrderPubkeyFirst, 'confirmed'),
+      account: await program.account.liquidityProvisionOrder.fetch(liquidityProvisionOrderPubkeyFirst, 'finalized'),
       publicKey: liquidityProvisionOrderPubkeyFirst,
     });
 
     const liquidityProvisionOrderPubkeySecond = (transaction.transaction.message.instructions[0] as any).accounts[1];
     const liquidityProvisionOrderSecond = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.liquidityProvisionOrder.fetch(liquidityProvisionOrderPubkeySecond, 'confirmed'),
+      account: await program.account.liquidityProvisionOrder.fetch(liquidityProvisionOrderPubkeySecond, 'finalized'),
       publicKey: liquidityProvisionOrderPubkeySecond,
     });
 
@@ -625,36 +643,37 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const pairPubkey = (transaction.transaction.message.instructions[0] as any).accounts[11];
     const pair = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftSwapPair.fetch(pairPubkey, 'confirmed'),
+      account: await program.account.nftSwapPair.fetch(pairPubkey, 'finalized'),
       publicKey: pairPubkey,
     });
 
     const liquidityProvisionOrderPubkeyFirst = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const liquidityProvisionOrderFirst = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.liquidityProvisionOrder.fetch(liquidityProvisionOrderPubkeyFirst, 'confirmed'),
+      account: await program.account.liquidityProvisionOrder.fetch(liquidityProvisionOrderPubkeyFirst, 'finalized'),
       publicKey: liquidityProvisionOrderPubkeyFirst,
     });
 
     const liquidityProvisionOrderPubkeySecond = (transaction.transaction.message.instructions[0] as any).accounts[1];
     const liquidityProvisionOrderSecond = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.liquidityProvisionOrder.fetch(liquidityProvisionOrderPubkeySecond, 'confirmed'),
+      account: await program.account.liquidityProvisionOrder.fetch(liquidityProvisionOrderPubkeySecond, 'finalized'),
       publicKey: liquidityProvisionOrderPubkeySecond,
     });
 
     const nftPairBoxPubkeyFirst = (transaction.transaction.message.instructions[0] as any).accounts[2];
     const nftPairBoxFirst = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftPairBox.fetch(nftPairBoxPubkeyFirst, 'confirmed'),
+      account: await program.account.nftPairBox.fetch(nftPairBoxPubkeyFirst, 'finalized'),
       publicKey: nftPairBoxPubkeyFirst,
     });
 
     const nftPairBoxPubkeySecond = (transaction.transaction.message.instructions[0] as any).accounts[3];
     const nftPairBoxSecond = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftPairBox.fetch(nftPairBoxPubkeySecond, 'confirmed'),
+      account: await program.account.nftPairBox.fetch(nftPairBoxPubkeySecond, 'finalized'),
       publicKey: nftPairBoxPubkeySecond,
     });
 
@@ -678,12 +697,13 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const liquidityProvisionOrderPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const liquidityProvisionOrder = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.liquidityProvisionOrder.fetch(liquidityProvisionOrderPubkey, 'confirmed'),
+      account: await program.account.liquidityProvisionOrder.fetch(liquidityProvisionOrderPubkey, 'finalized'),
       publicKey: liquidityProvisionOrderPubkey,
     });
 
@@ -707,6 +727,7 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
@@ -732,12 +753,13 @@ export const TRANSACTION_ACCOUNT_PARSERS = {
     programId,
     connection,
   }: TransactionAccountParserParams): Promise<AccountsChanged> => {
+    await new Promise((f) => setTimeout(f, 150));
     // console.log('propose txn: ', JSON.stringify(transaction));
     const program = await returnAnchorProgram(programId, connection);
 
     const pairPubkey = (transaction.transaction.message.instructions[0] as any).accounts[0];
     const pair = anchorRawBNsAndPubkeysToNumsAndStrings({
-      account: await program.account.nftSwapPair.fetch(pairPubkey, 'confirmed'),
+      account: await program.account.nftSwapPair.fetch(pairPubkey, 'finalized'),
       publicKey: pairPubkey,
     });
 

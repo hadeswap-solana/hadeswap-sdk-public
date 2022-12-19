@@ -116,7 +116,12 @@ export const getTradeTransactionsFromSignatures = async ({
         'confirmed',
       );
 
-      if (!currentTransactionInfo || !isTradeTransactionInfo(currentTransactionInfo as any)) {
+      if (
+        !currentTransactionInfo ||
+        !currentTransactionInfo.meta ||
+        currentTransactionInfo.meta.err !== null ||
+        !isTradeTransactionInfo(currentTransactionInfo as any)
+      ) {
         continue;
       }
       tradeTransactions.push(currentTransactionInfo as any);

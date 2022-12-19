@@ -20,9 +20,6 @@ type WithdrawLiquidityFromBuyOrdersPair = (params: {
     pair: web3.PublicKey;
     authorityAdapter: web3.PublicKey;
     userPubkey: web3.PublicKey;
-
-    liquidityProvisionOrderToWithdraw: web3.PublicKey;
-    liquidityProvisionOrderToReplace: web3.PublicKey;
   };
 
   sendTxn: (transaction: web3.Transaction, signers: web3.Signer[]) => Promise<void>;
@@ -53,9 +50,6 @@ export const withdrawLiquidityFromBuyOrdersPair: WithdrawLiquidityFromBuyOrdersP
     await program.methods
       .withdrawLiquidityFromBuyOrdersPair()
       .accounts({
-        liquidityProvisionOrderToWithdraw: accounts.liquidityProvisionOrderToWithdraw,
-        liquidityProvisionOrderToReplace: accounts.liquidityProvisionOrderToReplace,
-
         pair: accounts.pair,
         authorityAdapter: accounts.authorityAdapter,
         user: accounts.userPubkey,
