@@ -47,7 +47,7 @@ export type Hadeswap = {
         },
         {
           name: 'fundsSolVault';
-          isMut: false;
+          isMut: true;
           isSigner: false;
         },
         {
@@ -290,7 +290,7 @@ export type Hadeswap = {
         },
         {
           name: 'metadataInfo';
-          isMut: false;
+          isMut: true;
           isSigner: false;
         },
         {
@@ -298,8 +298,45 @@ export type Hadeswap = {
           isMut: false;
           isSigner: false;
         },
+        {
+          name: 'ownerTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'destTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'instructions';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'authorizationRulesProgram';
+          isMut: false;
+          isSigner: false;
+        },
       ];
-      args: [];
+      args: [
+        {
+          name: 'proof';
+          type: {
+            vec: {
+              array: ['u8', 32];
+            };
+          };
+        },
+        {
+          name: 'authorizationData';
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal';
+            };
+          };
+        },
+      ];
       returns: undefined;
     },
     {
@@ -490,7 +527,7 @@ export type Hadeswap = {
         },
         {
           name: 'metadataInfo';
-          isMut: false;
+          isMut: true;
           isSigner: false;
         },
         {
@@ -498,8 +535,45 @@ export type Hadeswap = {
           isMut: false;
           isSigner: false;
         },
+        {
+          name: 'ownerTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'destTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'instructions';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'authorizationRulesProgram';
+          isMut: false;
+          isSigner: false;
+        },
       ];
-      args: [];
+      args: [
+        {
+          name: 'proof';
+          type: {
+            vec: {
+              array: ['u8', 32];
+            };
+          };
+        },
+        {
+          name: 'authorizationData';
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal';
+            };
+          };
+        },
+      ];
       returns: undefined;
     },
     {
@@ -588,6 +662,36 @@ export type Hadeswap = {
           isSigner: false;
         },
         {
+          name: 'editionInfo';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'metadataInfo';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'ownerTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'destTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'instructions';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'authorizationRulesProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
           name: 'protocolFeeReceiver';
           isMut: true;
           isSigner: false;
@@ -612,6 +716,11 @@ export type Hadeswap = {
           isMut: false;
           isSigner: false;
         },
+        {
+          name: 'metadataProgram';
+          isMut: false;
+          isSigner: false;
+        },
       ];
       args: [
         {
@@ -621,6 +730,14 @@ export type Hadeswap = {
         {
           name: 'skipFailed';
           type: 'bool';
+        },
+        {
+          name: 'authorizationData';
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal';
+            };
+          };
         },
       ];
       returns: undefined;
@@ -695,11 +812,36 @@ export type Hadeswap = {
         },
         {
           name: 'metadataInfo';
-          isMut: false;
+          isMut: true;
           isSigner: false;
         },
         {
           name: 'editionInfo';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'ownerTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'destTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'instructions';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'authorizationRulesProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'metadataProgram';
           isMut: false;
           isSigner: false;
         },
@@ -712,6 +854,22 @@ export type Hadeswap = {
         {
           name: 'skipFailed';
           type: 'bool';
+        },
+        {
+          name: 'proof';
+          type: {
+            vec: {
+              array: ['u8', 32];
+            };
+          };
+        },
+        {
+          name: 'authorizationData';
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal';
+            };
+          };
         },
       ];
       returns: undefined;
@@ -770,6 +928,26 @@ export type Hadeswap = {
           isSigner: false;
         },
         {
+          name: 'ownerTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'destTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'instructions';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'authorizationRulesProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
           name: 'protocolFeeReceiver';
           isMut: true;
           isSigner: false;
@@ -796,11 +974,16 @@ export type Hadeswap = {
         },
         {
           name: 'metadataInfo';
-          isMut: false;
+          isMut: true;
           isSigner: false;
         },
         {
           name: 'editionInfo';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'metadataProgram';
           isMut: false;
           isSigner: false;
         },
@@ -813,6 +996,22 @@ export type Hadeswap = {
         {
           name: 'skipFailed';
           type: 'bool';
+        },
+        {
+          name: 'proof';
+          type: {
+            vec: {
+              array: ['u8', 32];
+            };
+          };
+        },
+        {
+          name: 'authorizationData';
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal';
+            };
+          };
         },
       ];
       returns: undefined;
@@ -903,6 +1102,36 @@ export type Hadeswap = {
           isSigner: false;
         },
         {
+          name: 'editionInfo';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'metadataInfo';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'ownerTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'destTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'instructions';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'authorizationRulesProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
           name: 'tokenProgram';
           isMut: false;
           isSigner: false;
@@ -922,8 +1151,22 @@ export type Hadeswap = {
           isMut: false;
           isSigner: false;
         },
+        {
+          name: 'metadataProgram';
+          isMut: false;
+          isSigner: false;
+        },
       ];
-      args: [];
+      args: [
+        {
+          name: 'authorizationData';
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal';
+            };
+          };
+        },
+      ];
       returns: undefined;
     },
     {
@@ -975,6 +1218,36 @@ export type Hadeswap = {
           isSigner: false;
         },
         {
+          name: 'editionInfo';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'metadataInfo';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'ownerTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'destTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'instructions';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'authorizationRulesProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
           name: 'nftUserTokenAccount';
           isMut: true;
           isSigner: false;
@@ -999,8 +1272,22 @@ export type Hadeswap = {
           isMut: false;
           isSigner: false;
         },
+        {
+          name: 'metadataProgram';
+          isMut: false;
+          isSigner: false;
+        },
       ];
-      args: [];
+      args: [
+        {
+          name: 'authorizationData';
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal';
+            };
+          };
+        },
+      ];
       returns: undefined;
     },
     {
@@ -1118,6 +1405,56 @@ export type Hadeswap = {
           isSigner: false;
         },
         {
+          name: 'editionInfoFirst';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'metadataInfoFirst';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'ownerTokenRecordFirst';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'destTokenRecordFirst';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'editionInfoSecond';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'metadataInfoSecond';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'ownerTokenRecordSecond';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'destTokenRecordSecond';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'instructions';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'authorizationRulesProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
           name: 'nftMintSecond';
           isMut: true;
           isSigner: false;
@@ -1174,6 +1511,11 @@ export type Hadeswap = {
         },
         {
           name: 'rent';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'metadataProgram';
           isMut: false;
           isSigner: false;
         },
@@ -1207,408 +1549,6 @@ export type Hadeswap = {
         {
           name: 'feeSolVault';
           isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'systemProgram';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'rent';
-          isMut: false;
-          isSigner: false;
-        },
-      ];
-      args: [];
-      returns: undefined;
-    },
-    {
-      name: 'makeLiquidityPairTokenized';
-      accounts: [
-        {
-          name: 'pair';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'authorityAdapter';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'user';
-          isMut: true;
-          isSigner: true;
-        },
-        {
-          name: 'systemProgram';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'rent';
-          isMut: false;
-          isSigner: false;
-        },
-      ];
-      args: [];
-      returns: undefined;
-    },
-    {
-      name: 'makeLiquidityProvisionOrderTokenized';
-      accounts: [
-        {
-          name: 'liquidityProvisionOrder';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'pair';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'authorityAdapter';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'user';
-          isMut: true;
-          isSigner: true;
-        },
-        {
-          name: 'nftsOwner';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'lpTokenMint';
-          isMut: true;
-          isSigner: true;
-        },
-        {
-          name: 'nftUserTokenAccount';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'tokenProgram';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'associatedTokenProgram';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'systemProgram';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'rent';
-          isMut: false;
-          isSigner: false;
-        },
-      ];
-      args: [];
-      returns: undefined;
-    },
-    {
-      name: 'withdrawLiquidityOrderTokenizedFees';
-      accounts: [
-        {
-          name: 'liquidityProvisionOrder';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'pair';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'user';
-          isMut: true;
-          isSigner: true;
-        },
-        {
-          name: 'userLpTokenAccount';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'feeSolVault';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'systemProgram';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'rent';
-          isMut: false;
-          isSigner: false;
-        },
-      ];
-      args: [];
-      returns: undefined;
-    },
-    {
-      name: 'withdrawLiquidityFromBalancedPairTokenized';
-      accounts: [
-        {
-          name: 'liquidityProvisionOrderToWithdraw';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'liquidityProvisionOrderToReplace';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'nftPairBox';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'pair';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'user';
-          isMut: true;
-          isSigner: true;
-        },
-        {
-          name: 'lpTokenMint';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'userLpTokenAccount';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'fundsSolVault';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'feeSolVault';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'nftsOwner';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'nftMint';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'vaultNftTokenAccount';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'nftUserTokenAccount';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'tokenProgram';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'associatedTokenProgram';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'systemProgram';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'rent';
-          isMut: false;
-          isSigner: false;
-        },
-      ];
-      args: [];
-      returns: undefined;
-    },
-    {
-      name: 'withdrawLiquidityFromBuyOrdersPairTokenized';
-      accounts: [
-        {
-          name: 'liquidityProvisionOrderToWithdraw';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'liquidityProvisionOrderToReplace';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'pair';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'user';
-          isMut: true;
-          isSigner: true;
-        },
-        {
-          name: 'lpTokenMint';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'userLpTokenAccount';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'fundsSolVault';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'feeSolVault';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'tokenProgram';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'associatedTokenProgram';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'systemProgram';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'rent';
-          isMut: false;
-          isSigner: false;
-        },
-      ];
-      args: [];
-      returns: undefined;
-    },
-    {
-      name: 'withdrawLiquidityFromSellOrdersPairTokenized';
-      accounts: [
-        {
-          name: 'liquidityProvisionOrderToWithdraw';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'liquidityProvisionOrderToReplace';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'nftPairBoxFirst';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'nftMintFirst';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'vaultNftTokenAccountFirst';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'nftUserTokenAccountFirst';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'nftPairBoxSecond';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'nftMintSecond';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'vaultNftTokenAccountSecond';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'nftUserTokenAccountSecond';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'pair';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'user';
-          isMut: true;
-          isSigner: true;
-        },
-        {
-          name: 'nftsOwner';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'feeSolVault';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'lpTokenMint';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'userLpTokenAccount';
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: 'tokenProgram';
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: 'associatedTokenProgram';
-          isMut: false;
           isSigner: false;
         },
         {
@@ -1826,6 +1766,531 @@ export type Hadeswap = {
         },
       ];
       args: [];
+      returns: undefined;
+    },
+    {
+      name: 'addMerkleTreeWhitelist';
+      accounts: [
+        {
+          name: 'nftValidationAdapter';
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: 'hadoMarket';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'user';
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: 'systemProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'rent';
+          isMut: false;
+          isSigner: false;
+        },
+      ];
+      args: [
+        {
+          name: 'root';
+          type: {
+            array: ['u8', 32];
+          };
+        },
+      ];
+      returns: undefined;
+    },
+    {
+      name: 'closeNftValidationAdapter';
+      accounts: [
+        {
+          name: 'nftValidationAdapter';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'admin';
+          isMut: true;
+          isSigner: true;
+        },
+      ];
+      args: [];
+      returns: undefined;
+    },
+    {
+      name: 'closeClassicWhitelist';
+      accounts: [
+        {
+          name: 'validationWhitelist';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'admin';
+          isMut: true;
+          isSigner: true;
+        },
+      ];
+      args: [];
+      returns: undefined;
+    },
+    {
+      name: 'closeNftValidationAdapterV2';
+      accounts: [
+        {
+          name: 'nftValidationAdapterV2';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'admin';
+          isMut: true;
+          isSigner: true;
+        },
+      ];
+      args: [];
+      returns: undefined;
+    },
+    {
+      name: 'withdrawOutstandingTokensByAdmin';
+      accounts: [
+        {
+          name: 'pair';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'user';
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: 'nftsOwner';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'nftMint';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'vaultNftTokenAccount';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'nftUserTokenAccount';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'tokenProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'editionInfo';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'metadataInfo';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'ownerTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'destTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'instructions';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'authorizationRulesProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'associatedTokenProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'systemProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'rent';
+          isMut: false;
+          isSigner: false;
+        },
+      ];
+      args: [
+        {
+          name: 'authorizationData';
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal';
+            };
+          };
+        },
+      ];
+      returns: undefined;
+    },
+    {
+      name: 'depositLiquidityOnlyBuyOrders';
+      accounts: [
+        {
+          name: 'pair';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'authorityAdapter';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'user';
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: 'fundsSolVault';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'systemProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'rent';
+          isMut: false;
+          isSigner: false;
+        },
+      ];
+      args: [
+        {
+          name: 'quantityOfOrders';
+          type: 'u64';
+        },
+      ];
+      returns: undefined;
+    },
+    {
+      name: 'withdrawLiquidityOnlyBuyOrders';
+      accounts: [
+        {
+          name: 'authorityAdapter';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'pair';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'user';
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: 'fundsSolVault';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'feeSolVault';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'systemProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'rent';
+          isMut: false;
+          isSigner: false;
+        },
+      ];
+      args: [
+        {
+          name: 'quantityOfOrders';
+          type: 'u64';
+        },
+      ];
+      returns: undefined;
+    },
+    {
+      name: 'depositLiquiditySingleSellToPair';
+      accounts: [
+        {
+          name: 'nftPairBox';
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: 'pair';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'authorityAdapter';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'nftValidationAdapter';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'user';
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: 'fundsSolVault';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'nftsOwner';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'nftMint';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'nftUserTokenAccount';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'vaultTokenAccount';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'tokenProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'associatedTokenProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'metadataProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'ownerTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'destTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'instructions';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'authorizationRulesProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'systemProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'rent';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'metadataInfo';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'editionInfo';
+          isMut: false;
+          isSigner: false;
+        },
+      ];
+      args: [
+        {
+          name: 'proof';
+          type: {
+            vec: {
+              array: ['u8', 32];
+            };
+          };
+        },
+        {
+          name: 'authorizationData';
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal';
+            };
+          };
+        },
+      ];
+      returns: undefined;
+    },
+    {
+      name: 'withdrawLiquiditySingleSellOrder';
+      accounts: [
+        {
+          name: 'nftPairBox';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'nftMint';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'vaultNftTokenAccount';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'nftUserTokenAccount';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'authorityAdapter';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'pair';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'user';
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: 'nftsOwner';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'feeSolVault';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'fundsSolVault';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'editionInfo';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'metadataInfo';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'ownerTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'destTokenRecord';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'instructions';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'authorizationRulesProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'tokenProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'associatedTokenProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'systemProgram';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'rent';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'metadataProgram';
+          isMut: false;
+          isSigner: false;
+        },
+      ];
+      args: [
+        {
+          name: 'authorizationData';
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal';
+            };
+          };
+        },
+      ];
       returns: undefined;
     },
   ];
@@ -2149,6 +2614,58 @@ export type Hadeswap = {
       };
     },
     {
+      name: 'nftValidationAdapterV2';
+      type: {
+        kind: 'struct';
+        fields: [
+          {
+            name: 'hadoMarket';
+            type: 'publicKey';
+          },
+          {
+            name: 'scopeType';
+            type: {
+              defined: 'ScopeType';
+            };
+          },
+          {
+            name: 'pair';
+            type: 'publicKey';
+          },
+          {
+            name: 'nftValidationProgram';
+            type: 'publicKey';
+          },
+          {
+            name: 'nftValidationWhitelistType';
+            type: {
+              defined: 'NftValidationWhitelistTypeV2';
+            };
+          },
+          {
+            name: 'whitelistedAddress';
+            type: 'publicKey';
+          },
+          {
+            name: 'root';
+            type: {
+              array: ['u8', 32];
+            };
+          },
+          {
+            name: 'nftValidationDurationType';
+            type: {
+              defined: 'NftValidationDurationType';
+            };
+          },
+          {
+            name: 'validUntil';
+            type: 'u64';
+          },
+        ];
+      };
+    },
+    {
       name: 'nftValidationAdapter';
       type: {
         kind: 'struct';
@@ -2297,6 +2814,70 @@ export type Hadeswap = {
             name: 'bondingType';
             type: {
               defined: 'BondingCurveType';
+            };
+          },
+        ];
+      };
+    },
+    {
+      name: 'AuthorizationDataLocal';
+      type: {
+        kind: 'struct';
+        fields: [
+          {
+            name: 'payload';
+            type: {
+              vec: {
+                defined: 'TaggedPayload';
+              };
+            };
+          },
+        ];
+      };
+    },
+    {
+      name: 'TaggedPayload';
+      type: {
+        kind: 'struct';
+        fields: [
+          {
+            name: 'name';
+            type: 'string';
+          },
+          {
+            name: 'payload';
+            type: {
+              defined: 'PayloadTypeLocal';
+            };
+          },
+        ];
+      };
+    },
+    {
+      name: 'SeedsVecLocal';
+      type: {
+        kind: 'struct';
+        fields: [
+          {
+            name: 'seeds';
+            type: {
+              vec: 'bytes';
+            };
+          },
+        ];
+      };
+    },
+    {
+      name: 'ProofInfoLocal';
+      type: {
+        kind: 'struct';
+        fields: [
+          {
+            name: 'proof';
+            type: {
+              vec: {
+                array: ['u8', 32];
+              };
             };
           },
         ];
@@ -2533,6 +3114,26 @@ export type Hadeswap = {
           {
             name: 'Exponential';
           },
+          {
+            name: 'XYK';
+          },
+        ];
+      };
+    },
+    {
+      name: 'NftValidationWhitelistTypeV2';
+      type: {
+        kind: 'enum';
+        variants: [
+          {
+            name: 'Creator';
+          },
+          {
+            name: 'Nft';
+          },
+          {
+            name: 'MerkleTree';
+          },
         ];
       };
     },
@@ -2574,6 +3175,38 @@ export type Hadeswap = {
           },
           {
             name: 'Nft';
+          },
+        ];
+      };
+    },
+    {
+      name: 'PayloadTypeLocal';
+      type: {
+        kind: 'enum';
+        variants: [
+          {
+            name: 'Pubkey';
+            fields: ['publicKey'];
+          },
+          {
+            name: 'Seeds';
+            fields: [
+              {
+                defined: 'SeedsVecLocal';
+              },
+            ];
+          },
+          {
+            name: 'MerkleProof';
+            fields: [
+              {
+                defined: 'ProofInfoLocal';
+              },
+            ];
+          },
+          {
+            name: 'Number';
+            fields: ['u64'];
           },
         ];
       };
@@ -2990,6 +3623,21 @@ export type Hadeswap = {
       name: 'CustomValidationAdapterProgramDoesntMatchUser';
       msg: 'CustomValidationAdapterProgramDoesntMatchUser';
     },
+    {
+      code: 6082;
+      name: 'ClassicAuthorityWorksIfValidationProgramIsHadeswap';
+      msg: 'ClassicAuthorityWorksIfValidationProgramIsHadeswap';
+    },
+    {
+      code: 6083;
+      name: 'NftValidationAdapterV2CanWhitelistOnlyMerkleTree';
+      msg: 'NftValidationAdapterV2CanWhitelistOnlyMerkleTree';
+    },
+    {
+      code: 6084;
+      name: 'BadRuleSet';
+      msg: 'BadRuleSet';
+    },
   ];
 };
 
@@ -3042,7 +3690,7 @@ export const IDL: Hadeswap = {
         },
         {
           name: 'fundsSolVault',
-          isMut: false,
+          isMut: true,
           isSigner: false,
         },
         {
@@ -3285,7 +3933,7 @@ export const IDL: Hadeswap = {
         },
         {
           name: 'metadataInfo',
-          isMut: false,
+          isMut: true,
           isSigner: false,
         },
         {
@@ -3293,8 +3941,45 @@ export const IDL: Hadeswap = {
           isMut: false,
           isSigner: false,
         },
+        {
+          name: 'ownerTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'destTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'instructions',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'authorizationRulesProgram',
+          isMut: false,
+          isSigner: false,
+        },
       ],
-      args: [],
+      args: [
+        {
+          name: 'proof',
+          type: {
+            vec: {
+              array: ['u8', 32],
+            },
+          },
+        },
+        {
+          name: 'authorizationData',
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal',
+            },
+          },
+        },
+      ],
       returns: undefined,
     },
     {
@@ -3485,7 +4170,7 @@ export const IDL: Hadeswap = {
         },
         {
           name: 'metadataInfo',
-          isMut: false,
+          isMut: true,
           isSigner: false,
         },
         {
@@ -3493,8 +4178,45 @@ export const IDL: Hadeswap = {
           isMut: false,
           isSigner: false,
         },
+        {
+          name: 'ownerTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'destTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'instructions',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'authorizationRulesProgram',
+          isMut: false,
+          isSigner: false,
+        },
       ],
-      args: [],
+      args: [
+        {
+          name: 'proof',
+          type: {
+            vec: {
+              array: ['u8', 32],
+            },
+          },
+        },
+        {
+          name: 'authorizationData',
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal',
+            },
+          },
+        },
+      ],
       returns: undefined,
     },
     {
@@ -3583,6 +4305,36 @@ export const IDL: Hadeswap = {
           isSigner: false,
         },
         {
+          name: 'editionInfo',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'metadataInfo',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'ownerTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'destTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'instructions',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'authorizationRulesProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
           name: 'protocolFeeReceiver',
           isMut: true,
           isSigner: false,
@@ -3607,6 +4359,11 @@ export const IDL: Hadeswap = {
           isMut: false,
           isSigner: false,
         },
+        {
+          name: 'metadataProgram',
+          isMut: false,
+          isSigner: false,
+        },
       ],
       args: [
         {
@@ -3616,6 +4373,14 @@ export const IDL: Hadeswap = {
         {
           name: 'skipFailed',
           type: 'bool',
+        },
+        {
+          name: 'authorizationData',
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal',
+            },
+          },
         },
       ],
       returns: undefined,
@@ -3690,11 +4455,36 @@ export const IDL: Hadeswap = {
         },
         {
           name: 'metadataInfo',
-          isMut: false,
+          isMut: true,
           isSigner: false,
         },
         {
           name: 'editionInfo',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'ownerTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'destTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'instructions',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'authorizationRulesProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'metadataProgram',
           isMut: false,
           isSigner: false,
         },
@@ -3707,6 +4497,22 @@ export const IDL: Hadeswap = {
         {
           name: 'skipFailed',
           type: 'bool',
+        },
+        {
+          name: 'proof',
+          type: {
+            vec: {
+              array: ['u8', 32],
+            },
+          },
+        },
+        {
+          name: 'authorizationData',
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal',
+            },
+          },
         },
       ],
       returns: undefined,
@@ -3765,6 +4571,26 @@ export const IDL: Hadeswap = {
           isSigner: false,
         },
         {
+          name: 'ownerTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'destTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'instructions',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'authorizationRulesProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
           name: 'protocolFeeReceiver',
           isMut: true,
           isSigner: false,
@@ -3791,11 +4617,16 @@ export const IDL: Hadeswap = {
         },
         {
           name: 'metadataInfo',
-          isMut: false,
+          isMut: true,
           isSigner: false,
         },
         {
           name: 'editionInfo',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'metadataProgram',
           isMut: false,
           isSigner: false,
         },
@@ -3808,6 +4639,22 @@ export const IDL: Hadeswap = {
         {
           name: 'skipFailed',
           type: 'bool',
+        },
+        {
+          name: 'proof',
+          type: {
+            vec: {
+              array: ['u8', 32],
+            },
+          },
+        },
+        {
+          name: 'authorizationData',
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal',
+            },
+          },
         },
       ],
       returns: undefined,
@@ -3898,6 +4745,36 @@ export const IDL: Hadeswap = {
           isSigner: false,
         },
         {
+          name: 'editionInfo',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'metadataInfo',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'ownerTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'destTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'instructions',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'authorizationRulesProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
           name: 'tokenProgram',
           isMut: false,
           isSigner: false,
@@ -3917,8 +4794,22 @@ export const IDL: Hadeswap = {
           isMut: false,
           isSigner: false,
         },
+        {
+          name: 'metadataProgram',
+          isMut: false,
+          isSigner: false,
+        },
       ],
-      args: [],
+      args: [
+        {
+          name: 'authorizationData',
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal',
+            },
+          },
+        },
+      ],
       returns: undefined,
     },
     {
@@ -3970,6 +4861,36 @@ export const IDL: Hadeswap = {
           isSigner: false,
         },
         {
+          name: 'editionInfo',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'metadataInfo',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'ownerTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'destTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'instructions',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'authorizationRulesProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
           name: 'nftUserTokenAccount',
           isMut: true,
           isSigner: false,
@@ -3994,8 +4915,22 @@ export const IDL: Hadeswap = {
           isMut: false,
           isSigner: false,
         },
+        {
+          name: 'metadataProgram',
+          isMut: false,
+          isSigner: false,
+        },
       ],
-      args: [],
+      args: [
+        {
+          name: 'authorizationData',
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal',
+            },
+          },
+        },
+      ],
       returns: undefined,
     },
     {
@@ -4113,6 +5048,56 @@ export const IDL: Hadeswap = {
           isSigner: false,
         },
         {
+          name: 'editionInfoFirst',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'metadataInfoFirst',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'ownerTokenRecordFirst',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'destTokenRecordFirst',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'editionInfoSecond',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'metadataInfoSecond',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'ownerTokenRecordSecond',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'destTokenRecordSecond',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'instructions',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'authorizationRulesProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
           name: 'nftMintSecond',
           isMut: true,
           isSigner: false,
@@ -4169,6 +5154,11 @@ export const IDL: Hadeswap = {
         },
         {
           name: 'rent',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'metadataProgram',
           isMut: false,
           isSigner: false,
         },
@@ -4202,408 +5192,6 @@ export const IDL: Hadeswap = {
         {
           name: 'feeSolVault',
           isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'systemProgram',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'rent',
-          isMut: false,
-          isSigner: false,
-        },
-      ],
-      args: [],
-      returns: undefined,
-    },
-    {
-      name: 'makeLiquidityPairTokenized',
-      accounts: [
-        {
-          name: 'pair',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'authorityAdapter',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'user',
-          isMut: true,
-          isSigner: true,
-        },
-        {
-          name: 'systemProgram',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'rent',
-          isMut: false,
-          isSigner: false,
-        },
-      ],
-      args: [],
-      returns: undefined,
-    },
-    {
-      name: 'makeLiquidityProvisionOrderTokenized',
-      accounts: [
-        {
-          name: 'liquidityProvisionOrder',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'pair',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'authorityAdapter',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'user',
-          isMut: true,
-          isSigner: true,
-        },
-        {
-          name: 'nftsOwner',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'lpTokenMint',
-          isMut: true,
-          isSigner: true,
-        },
-        {
-          name: 'nftUserTokenAccount',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'tokenProgram',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'associatedTokenProgram',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'systemProgram',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'rent',
-          isMut: false,
-          isSigner: false,
-        },
-      ],
-      args: [],
-      returns: undefined,
-    },
-    {
-      name: 'withdrawLiquidityOrderTokenizedFees',
-      accounts: [
-        {
-          name: 'liquidityProvisionOrder',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'pair',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'user',
-          isMut: true,
-          isSigner: true,
-        },
-        {
-          name: 'userLpTokenAccount',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'feeSolVault',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'systemProgram',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'rent',
-          isMut: false,
-          isSigner: false,
-        },
-      ],
-      args: [],
-      returns: undefined,
-    },
-    {
-      name: 'withdrawLiquidityFromBalancedPairTokenized',
-      accounts: [
-        {
-          name: 'liquidityProvisionOrderToWithdraw',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'liquidityProvisionOrderToReplace',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'nftPairBox',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'pair',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'user',
-          isMut: true,
-          isSigner: true,
-        },
-        {
-          name: 'lpTokenMint',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'userLpTokenAccount',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'fundsSolVault',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'feeSolVault',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'nftsOwner',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'nftMint',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'vaultNftTokenAccount',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'nftUserTokenAccount',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'tokenProgram',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'associatedTokenProgram',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'systemProgram',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'rent',
-          isMut: false,
-          isSigner: false,
-        },
-      ],
-      args: [],
-      returns: undefined,
-    },
-    {
-      name: 'withdrawLiquidityFromBuyOrdersPairTokenized',
-      accounts: [
-        {
-          name: 'liquidityProvisionOrderToWithdraw',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'liquidityProvisionOrderToReplace',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'pair',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'user',
-          isMut: true,
-          isSigner: true,
-        },
-        {
-          name: 'lpTokenMint',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'userLpTokenAccount',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'fundsSolVault',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'feeSolVault',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'tokenProgram',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'associatedTokenProgram',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'systemProgram',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'rent',
-          isMut: false,
-          isSigner: false,
-        },
-      ],
-      args: [],
-      returns: undefined,
-    },
-    {
-      name: 'withdrawLiquidityFromSellOrdersPairTokenized',
-      accounts: [
-        {
-          name: 'liquidityProvisionOrderToWithdraw',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'liquidityProvisionOrderToReplace',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'nftPairBoxFirst',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'nftMintFirst',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'vaultNftTokenAccountFirst',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'nftUserTokenAccountFirst',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'nftPairBoxSecond',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'nftMintSecond',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'vaultNftTokenAccountSecond',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'nftUserTokenAccountSecond',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'pair',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'user',
-          isMut: true,
-          isSigner: true,
-        },
-        {
-          name: 'nftsOwner',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'feeSolVault',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'lpTokenMint',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'userLpTokenAccount',
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: 'tokenProgram',
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: 'associatedTokenProgram',
-          isMut: false,
           isSigner: false,
         },
         {
@@ -4821,6 +5409,531 @@ export const IDL: Hadeswap = {
         },
       ],
       args: [],
+      returns: undefined,
+    },
+    {
+      name: 'addMerkleTreeWhitelist',
+      accounts: [
+        {
+          name: 'nftValidationAdapter',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'hadoMarket',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'user',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'systemProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'rent',
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: 'root',
+          type: {
+            array: ['u8', 32],
+          },
+        },
+      ],
+      returns: undefined,
+    },
+    {
+      name: 'closeNftValidationAdapter',
+      accounts: [
+        {
+          name: 'nftValidationAdapter',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'admin',
+          isMut: true,
+          isSigner: true,
+        },
+      ],
+      args: [],
+      returns: undefined,
+    },
+    {
+      name: 'closeClassicWhitelist',
+      accounts: [
+        {
+          name: 'validationWhitelist',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'admin',
+          isMut: true,
+          isSigner: true,
+        },
+      ],
+      args: [],
+      returns: undefined,
+    },
+    {
+      name: 'closeNftValidationAdapterV2',
+      accounts: [
+        {
+          name: 'nftValidationAdapterV2',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'admin',
+          isMut: true,
+          isSigner: true,
+        },
+      ],
+      args: [],
+      returns: undefined,
+    },
+    {
+      name: 'withdrawOutstandingTokensByAdmin',
+      accounts: [
+        {
+          name: 'pair',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'user',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'nftsOwner',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'nftMint',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'vaultNftTokenAccount',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'nftUserTokenAccount',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'tokenProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'editionInfo',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'metadataInfo',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'ownerTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'destTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'instructions',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'authorizationRulesProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'associatedTokenProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'systemProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'rent',
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: 'authorizationData',
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal',
+            },
+          },
+        },
+      ],
+      returns: undefined,
+    },
+    {
+      name: 'depositLiquidityOnlyBuyOrders',
+      accounts: [
+        {
+          name: 'pair',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'authorityAdapter',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'user',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'fundsSolVault',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'systemProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'rent',
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: 'quantityOfOrders',
+          type: 'u64',
+        },
+      ],
+      returns: undefined,
+    },
+    {
+      name: 'withdrawLiquidityOnlyBuyOrders',
+      accounts: [
+        {
+          name: 'authorityAdapter',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'pair',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'user',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'fundsSolVault',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'feeSolVault',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'systemProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'rent',
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: 'quantityOfOrders',
+          type: 'u64',
+        },
+      ],
+      returns: undefined,
+    },
+    {
+      name: 'depositLiquiditySingleSellToPair',
+      accounts: [
+        {
+          name: 'nftPairBox',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'pair',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'authorityAdapter',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'nftValidationAdapter',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'user',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'fundsSolVault',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'nftsOwner',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'nftMint',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'nftUserTokenAccount',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'vaultTokenAccount',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'tokenProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'associatedTokenProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'metadataProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'ownerTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'destTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'instructions',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'authorizationRulesProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'systemProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'rent',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'metadataInfo',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'editionInfo',
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: 'proof',
+          type: {
+            vec: {
+              array: ['u8', 32],
+            },
+          },
+        },
+        {
+          name: 'authorizationData',
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal',
+            },
+          },
+        },
+      ],
+      returns: undefined,
+    },
+    {
+      name: 'withdrawLiquiditySingleSellOrder',
+      accounts: [
+        {
+          name: 'nftPairBox',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'nftMint',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'vaultNftTokenAccount',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'nftUserTokenAccount',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'authorityAdapter',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'pair',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'user',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'nftsOwner',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'feeSolVault',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'fundsSolVault',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'editionInfo',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'metadataInfo',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'ownerTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'destTokenRecord',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'instructions',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'authorizationRulesProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'tokenProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'associatedTokenProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'systemProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'rent',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'metadataProgram',
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: 'authorizationData',
+          type: {
+            option: {
+              defined: 'AuthorizationDataLocal',
+            },
+          },
+        },
+      ],
       returns: undefined,
     },
   ],
@@ -5144,6 +6257,58 @@ export const IDL: Hadeswap = {
       },
     },
     {
+      name: 'nftValidationAdapterV2',
+      type: {
+        kind: 'struct',
+        fields: [
+          {
+            name: 'hadoMarket',
+            type: 'publicKey',
+          },
+          {
+            name: 'scopeType',
+            type: {
+              defined: 'ScopeType',
+            },
+          },
+          {
+            name: 'pair',
+            type: 'publicKey',
+          },
+          {
+            name: 'nftValidationProgram',
+            type: 'publicKey',
+          },
+          {
+            name: 'nftValidationWhitelistType',
+            type: {
+              defined: 'NftValidationWhitelistTypeV2',
+            },
+          },
+          {
+            name: 'whitelistedAddress',
+            type: 'publicKey',
+          },
+          {
+            name: 'root',
+            type: {
+              array: ['u8', 32],
+            },
+          },
+          {
+            name: 'nftValidationDurationType',
+            type: {
+              defined: 'NftValidationDurationType',
+            },
+          },
+          {
+            name: 'validUntil',
+            type: 'u64',
+          },
+        ],
+      },
+    },
+    {
       name: 'nftValidationAdapter',
       type: {
         kind: 'struct',
@@ -5292,6 +6457,70 @@ export const IDL: Hadeswap = {
             name: 'bondingType',
             type: {
               defined: 'BondingCurveType',
+            },
+          },
+        ],
+      },
+    },
+    {
+      name: 'AuthorizationDataLocal',
+      type: {
+        kind: 'struct',
+        fields: [
+          {
+            name: 'payload',
+            type: {
+              vec: {
+                defined: 'TaggedPayload',
+              },
+            },
+          },
+        ],
+      },
+    },
+    {
+      name: 'TaggedPayload',
+      type: {
+        kind: 'struct',
+        fields: [
+          {
+            name: 'name',
+            type: 'string',
+          },
+          {
+            name: 'payload',
+            type: {
+              defined: 'PayloadTypeLocal',
+            },
+          },
+        ],
+      },
+    },
+    {
+      name: 'SeedsVecLocal',
+      type: {
+        kind: 'struct',
+        fields: [
+          {
+            name: 'seeds',
+            type: {
+              vec: 'bytes',
+            },
+          },
+        ],
+      },
+    },
+    {
+      name: 'ProofInfoLocal',
+      type: {
+        kind: 'struct',
+        fields: [
+          {
+            name: 'proof',
+            type: {
+              vec: {
+                array: ['u8', 32],
+              },
             },
           },
         ],
@@ -5528,6 +6757,26 @@ export const IDL: Hadeswap = {
           {
             name: 'Exponential',
           },
+          {
+            name: 'XYK',
+          },
+        ],
+      },
+    },
+    {
+      name: 'NftValidationWhitelistTypeV2',
+      type: {
+        kind: 'enum',
+        variants: [
+          {
+            name: 'Creator',
+          },
+          {
+            name: 'Nft',
+          },
+          {
+            name: 'MerkleTree',
+          },
         ],
       },
     },
@@ -5569,6 +6818,38 @@ export const IDL: Hadeswap = {
           },
           {
             name: 'Nft',
+          },
+        ],
+      },
+    },
+    {
+      name: 'PayloadTypeLocal',
+      type: {
+        kind: 'enum',
+        variants: [
+          {
+            name: 'Pubkey',
+            fields: ['publicKey'],
+          },
+          {
+            name: 'Seeds',
+            fields: [
+              {
+                defined: 'SeedsVecLocal',
+              },
+            ],
+          },
+          {
+            name: 'MerkleProof',
+            fields: [
+              {
+                defined: 'ProofInfoLocal',
+              },
+            ],
+          },
+          {
+            name: 'Number',
+            fields: ['u64'],
           },
         ],
       },
@@ -5984,6 +7265,21 @@ export const IDL: Hadeswap = {
       code: 6081,
       name: 'CustomValidationAdapterProgramDoesntMatchUser',
       msg: 'CustomValidationAdapterProgramDoesntMatchUser',
+    },
+    {
+      code: 6082,
+      name: 'ClassicAuthorityWorksIfValidationProgramIsHadeswap',
+      msg: 'ClassicAuthorityWorksIfValidationProgramIsHadeswap',
+    },
+    {
+      code: 6083,
+      name: 'NftValidationAdapterV2CanWhitelistOnlyMerkleTree',
+      msg: 'NftValidationAdapterV2CanWhitelistOnlyMerkleTree',
+    },
+    {
+      code: 6084,
+      name: 'BadRuleSet',
+      msg: 'BadRuleSet',
     },
   ],
 };

@@ -30,7 +30,7 @@ export const depositSolToPair: DepositSolToPair = async ({ programId, connection
     [encoder.encode(SOL_FUNDS_PREFIX), accounts.pair.toBuffer()],
     program.programId,
   );
-  
+
   const modifyComputeUnits = web3.ComputeBudgetProgram.setComputeUnitLimit({
     units: Math.round(70000000 * (args.amountOfOrders / 10) + 1),
   });
@@ -44,7 +44,7 @@ export const depositSolToPair: DepositSolToPair = async ({ programId, connection
   instructions.push(
     await program.methods
       .depositSolToPair(new BN(args.amountOfOrders))
-      .accounts({
+      .accountsStrict({
         pair: accounts.pair,
         authorityAdapter: accounts.authorityAdapter,
         user: accounts.userPubkey,

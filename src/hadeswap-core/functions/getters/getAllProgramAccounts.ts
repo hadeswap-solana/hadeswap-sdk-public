@@ -10,6 +10,8 @@ export const getAllProgramAccounts = async (
   nftPairBoxes: any[];
   classicValidationWhitelists: any[];
   nftValidationAdapters: any[];
+  nftValidationAdaptersV2: any[];
+
   authorityAdapters: any[];
 
   adapterWhitelists: any[];
@@ -32,6 +34,9 @@ export const getAllProgramAccounts = async (
 
   const nftValidationAdaptersRaw = await program.account.nftValidationAdapter.all();
   const nftValidationAdapters = nftValidationAdaptersRaw.map((acc) => anchorRawBNsAndPubkeysToNumsAndStrings(acc));
+
+  const nftValidationAdaptersV2Raw = await program.account.nftValidationAdapterV2.all();
+  const nftValidationAdaptersV2 = nftValidationAdaptersV2Raw.map((acc) => anchorRawBNsAndPubkeysToNumsAndStrings(acc));
 
   const authorityAdaptersRaw = await program.account.authorityAdapter.all();
   const authorityAdapters = authorityAdaptersRaw.map((acc) => anchorRawBNsAndPubkeysToNumsAndStrings(acc));
@@ -59,6 +64,7 @@ export const getAllProgramAccounts = async (
     nftPairBoxes,
     classicValidationWhitelists,
     nftValidationAdapters,
+    nftValidationAdaptersV2,
     authorityAdapters,
 
     adapterWhitelists,

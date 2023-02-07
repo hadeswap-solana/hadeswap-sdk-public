@@ -16,6 +16,7 @@ interface InitializePairArgs {
 type InitializePair = (params: {
   programId: web3.PublicKey;
   connection: web3.Connection;
+  pairKp?: web3.Keypair;
 
   args: InitializePairArgs;
 
@@ -27,10 +28,10 @@ type InitializePair = (params: {
   sendTxn: (transaction: web3.Transaction, signers: web3.Signer[]) => Promise<void>;
 }) => Promise<{ account: web3.PublicKey; instructions: web3.TransactionInstruction[]; signers: web3.Signer[] }>;
 
-export const initializePair: InitializePair = async ({ programId, connection, args, accounts, sendTxn }) => {
+export const initializePair: InitializePair = async ({ programId, connection, args, accounts, sendTxn, pairKp }) => {
   const program = returnAnchorProgram(programId, connection);
   const instructions: web3.TransactionInstruction[] = [];
-  const pair = web3.Keypair.generate();
+  const pair = pairKp ?? web3.Keypair.generate();
 
   const [feeSolVault, feeVaultSeed] = await web3.PublicKey.findProgramAddress(
     [ENCODER.encode(FEE_PREFIX), pair.publicKey.toBuffer()],
@@ -65,7 +66,7 @@ export const initializePair: InitializePair = async ({ programId, connection, ar
         enumToAnchorEnum(args.bondingCurveType),
         enumToAnchorEnum(args.pairType),
       )
-      .accounts({
+      .accountsStrict({
         pair: pair.publicKey,
         hadoMarket: accounts.hadoMarket,
 
@@ -92,10 +93,10 @@ export const initializePair: InitializePair = async ({ programId, connection, ar
       .instruction(),
   );
 
-  const transaction = new web3.Transaction();
-  for (let instruction of instructions) transaction.add(instruction);
+  // const transaction = new web3.Transaction();
+  // for (let instruction of instructions) transaction.add(instruction);
 
   const signers = [pair];
-  await sendTxn(transaction, signers);
+  // await sendTxn(transaction, signers);
   return { account: pair.publicKey, instructions, signers };
 };

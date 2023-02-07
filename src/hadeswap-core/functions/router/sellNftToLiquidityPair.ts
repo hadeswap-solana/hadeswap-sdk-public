@@ -8,14 +8,18 @@ import {
   METADATA_PROGRAM_PUBKEY,
   SOL_FUNDS_PREFIX,
   FEE_PREFIX,
+  AUTHORIZATION_RULES_PROGRAM,
 } from '../../constants';
 
 import {
   anchorRawBNsAndPubkeysToNumsAndStrings,
+  findRuleSetPDA,
+  findTokenRecordPda,
   getMetaplexEditionPda,
   getMetaplexMetadataPda,
   returnAnchorProgram,
 } from '../../helpers';
+import { Metadata } from '@metaplex-foundation/mpl-token-metadata';
 
 type SellNftToLiquidityPair = (params: {
   programId: web3.PublicKey;
@@ -24,10 +28,16 @@ type SellNftToLiquidityPair = (params: {
   args: {
     minAmountToGet: number;
     skipFailed: boolean;
+    proof?: Buffer[];
+    pnft?: {
+      nameForRuleSet?: string;
+      payerRuleSet?: web3.PublicKey;
+    };
   };
-
   accounts: {
     nftValidationAdapter: web3.PublicKey;
+    nftValidationAdapterV2?: web3.PublicKey;
+
     pair: web3.PublicKey;
     userPubkey: web3.PublicKey;
     nftMint: web3.PublicKey;
@@ -66,13 +76,23 @@ export const sellNftToLiquidityPair: SellNftToLiquidityPair = async ({
     program.programId,
   );
 
-  const metadataInfo = getMetaplexMetadataPda(accounts.nftMint);
+  const ownerTokenRecord = findTokenRecordPda(accounts.nftMint, userNftTokenAccount);
+  const destTokenRecord = findTokenRecordPda(accounts.nftMint, newVaultTokenAccount);
   const editionInfo = getMetaplexEditionPda(accounts.nftMint);
+  const metadataInfo = getMetaplexMetadataPda(accounts.nftMint);
+  const ruleSet = !args?.pnft
+    ? METADATA_PROGRAM_PUBKEY
+    : args?.pnft?.payerRuleSet && args?.pnft?.nameForRuleSet
+    ? await findRuleSetPDA(args.pnft.payerRuleSet, args.pnft.nameForRuleSet)
+    : (await Metadata.fromAccountAddress(connection, metadataInfo)).programmableConfig?.ruleSet;
 
-  instructions.push(
-    await program.methods
-      .sellNftToLiquidityPair(new BN(args.minAmountToGet), args.skipFailed)
-      .accounts({
+  const modifyComputeUnits = web3.ComputeBudgetProgram.setComputeUnitLimit({
+    units: Math.round(400000),
+  });
+  instructions.push(modifyComputeUnits);
+  console.log(
+    anchorRawBNsAndPubkeysToNumsAndStrings({
+      account: {
         nftPairBox: nftPairBox.publicKey,
         nftValidationAdapter: accounts.nftValidationAdapter,
         pair: accounts.pair,
@@ -93,9 +113,72 @@ export const sellNftToLiquidityPair: SellNftToLiquidityPair = async ({
         systemProgram: web3.SystemProgram.programId,
         rent: web3.SYSVAR_RENT_PUBKEY,
 
-        metadataInfo: metadataInfo,
-        editionInfo: editionInfo,
+        instructions: web3.SYSVAR_INSTRUCTIONS_PUBKEY,
+        metadataInfo,
+        ownerTokenRecord,
+        destTokenRecord,
+        editionInfo,
+        authorizationRulesProgram: AUTHORIZATION_RULES_PROGRAM,
+        metadataProgram: METADATA_PROGRAM_PUBKEY,
+        ruleSet,
+      },
+      publicKey: userNftTokenAccount,
+    }),
+  );
+  instructions.push(
+    await program.methods
+      .sellNftToLiquidityPair(new BN(args.minAmountToGet), args.skipFailed, args.proof ? args.proof : [], null)
+      .accountsStrict({
+        nftPairBox: nftPairBox.publicKey,
+        nftValidationAdapter: accounts.nftValidationAdapter,
+        pair: accounts.pair,
+        user: accounts.userPubkey,
+        nftMint: accounts.nftMint,
+
+        nftUserTokenAccount: userNftTokenAccount,
+        tokenProgram: TOKEN_PROGRAM_ID,
+
+        nftsOwner: nftsOwner,
+        feeSolVault: feeSolVault,
+        newVaultTokenAccount: newVaultTokenAccount,
+        protocolFeeReceiver: accounts.protocolFeeReceiver,
+        associatedTokenProgram: ASSOCIATED_PROGRAM_ID,
+
+        fundsSolVault: solFundsVault,
+
+        systemProgram: web3.SystemProgram.programId,
+        rent: web3.SYSVAR_RENT_PUBKEY,
+
+        instructions: web3.SYSVAR_INSTRUCTIONS_PUBKEY,
+        metadataInfo,
+        ownerTokenRecord,
+        destTokenRecord,
+        editionInfo,
+        authorizationRulesProgram: AUTHORIZATION_RULES_PROGRAM,
+        metadataProgram: METADATA_PROGRAM_PUBKEY,
       })
+      .remainingAccounts(
+        accounts.nftValidationAdapterV2
+          ? [
+              {
+                pubkey: accounts.nftValidationAdapterV2,
+                isSigner: false,
+                isWritable: false,
+              },
+              {
+                pubkey: ruleSet || METADATA_PROGRAM_PUBKEY,
+                isSigner: false,
+                isWritable: false,
+              },
+            ]
+          : [
+              {
+                pubkey: ruleSet || METADATA_PROGRAM_PUBKEY,
+                isSigner: false,
+                isWritable: false,
+              },
+            ],
+      )
       .instruction(),
   );
   const transaction = new web3.Transaction();

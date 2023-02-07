@@ -31,7 +31,7 @@ export const putPairOnMarket: PutPairOnMarket = async ({ programId, connection, 
   instructions.push(
     await program.methods
       .putPairOnMarket()
-      .accounts({
+      .accountsStrict({
         pair: accounts.pair,
         authorityAdapter: accounts.authorityAdapter,
         user: accounts.userPubkey,

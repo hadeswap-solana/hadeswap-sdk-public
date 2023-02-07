@@ -5,6 +5,7 @@ import { returnAnchorProgram } from '../../../../../helpers';
 type CreateClassicAuthorityAdapter = (params: {
   programId: web3.PublicKey;
   connection: web3.Connection;
+  authorityAdapterKp?: web3.Keypair;
 
   accounts: {
     userPubkey: web3.PublicKey;
@@ -17,16 +18,17 @@ type CreateClassicAuthorityAdapter = (params: {
 export const createClassicAuthorityAdapter: CreateClassicAuthorityAdapter = async ({
   programId,
   connection,
+  authorityAdapterKp,
   accounts,
   sendTxn,
 }) => {
   const program = returnAnchorProgram(programId, connection);
   const instructions: web3.TransactionInstruction[] = [];
-  const authorityAdapter = web3.Keypair.generate();
+  const authorityAdapter = authorityAdapterKp ?? web3.Keypair.generate();
   instructions.push(
     await program.methods
       .createClassicAuthorityAdapter()
-      .accounts({
+      .accountsStrict({
         pair: accounts.pair,
         authorityAdapter: authorityAdapter.publicKey,
         user: accounts.userPubkey,

@@ -28,7 +28,7 @@ export const withdrawVirtualFees: WithdrawVirtualFees = async ({ programId, conn
   instructions.push(
     await program.methods
       .withdrawVirtualFees()
-      .accounts({
+      .accountsStrict({
         pair: accounts.pair,
         authorityAdapter: accounts.authorityAdapter,
         user: accounts.userPubkey,

@@ -11,6 +11,7 @@ import {
 } from '../../../../../constants';
 
 import { getMetaplexMetadataPda, returnAnchorProgram } from '../../../../../helpers';
+import { Keypair } from '@solana/web3.js';
 
 type WithdrawLiquidityFromBuyOrdersPair = (params: {
   programId: web3.PublicKey;
@@ -45,11 +46,14 @@ export const withdrawLiquidityFromBuyOrdersPair: WithdrawLiquidityFromBuyOrdersP
     [ENCODER.encode(FEE_PREFIX), accounts.pair.toBuffer()],
     program.programId,
   );
-
+  const modifyComputeUnits = web3.ComputeBudgetProgram.setComputeUnitLimit({
+    units: Math.round(400000),
+  });
+  instructions.push(modifyComputeUnits);
   instructions.push(
     await program.methods
       .withdrawLiquidityFromBuyOrdersPair()
-      .accounts({
+      .accountsStrict({
         pair: accounts.pair,
         authorityAdapter: accounts.authorityAdapter,
         user: accounts.userPubkey,
@@ -59,6 +63,7 @@ export const withdrawLiquidityFromBuyOrdersPair: WithdrawLiquidityFromBuyOrdersP
         systemProgram: web3.SystemProgram.programId,
         rent: web3.SYSVAR_RENT_PUBKEY,
       })
+      .remainingAccounts([{ pubkey: Keypair.generate().publicKey, isSigner: false, isWritable: false }])
       .instruction(),
   );
   const transaction = new web3.Transaction();

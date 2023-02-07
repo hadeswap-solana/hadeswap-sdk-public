@@ -16,7 +16,7 @@ export const getTradeActivities = async ({
 }) => {
   const LIMIT = 100;
   let allSignaturesInfos: web3.ConfirmedSignatureInfo[] = [];
-  let currentLastSignature = (
+  const currentLastSignatureInfo = (
     await connection.getConfirmedSignaturesForAddress2(
       programId,
       {
@@ -24,7 +24,9 @@ export const getTradeActivities = async ({
       },
       'confirmed',
     )
-  )[0].signature;
+  )[0];
+
+  let currentLastSignature = currentLastSignatureInfo.signature;
 
   let newSignatureInfosLatestToPast = await connection.getConfirmedSignaturesForAddress2(
     programId,
@@ -35,9 +37,13 @@ export const getTradeActivities = async ({
     },
     'confirmed',
   );
-  currentLastSignature = newSignatureInfosLatestToPast[newSignatureInfosLatestToPast.length - 1].signature;
 
-  allSignaturesInfos = [...allSignaturesInfos, ...newSignatureInfosLatestToPast];
+  if (newSignatureInfosLatestToPast.length > 0)
+    currentLastSignature = newSignatureInfosLatestToPast[newSignatureInfosLatestToPast.length - 1].signature;
+
+  allSignaturesInfos = [...allSignaturesInfos, ...newSignatureInfosLatestToPast, currentLastSignatureInfo].filter(
+    (signatureInfo) => !signatureInfo.err,
+  );
 
   while (newSignatureInfosLatestToPast.length === LIMIT) {
     newSignatureInfosLatestToPast = await connection.getConfirmedSignaturesForAddress2(
@@ -49,29 +55,33 @@ export const getTradeActivities = async ({
       },
       'confirmed',
     );
-    currentLastSignature = newSignatureInfosLatestToPast[newSignatureInfosLatestToPast.length - 1].signature;
+
+    currentLastSignature = newSignatureInfosLatestToPast.filter((signatureInfo) => signatureInfo)[
+      newSignatureInfosLatestToPast.length - 1
+    ].signature;
 
     allSignaturesInfos = [...allSignaturesInfos, ...newSignatureInfosLatestToPast].filter(
       (signatureInfo) => !signatureInfo.err,
     );
-    console.log('last signature of length: ', allSignaturesInfos.length);
 
     if (limit !== undefined && allSignaturesInfos.length >= limit) {
       break;
     }
   }
   // allSignaturesInfos = allSignaturesInfos.filter((signatureInfo) => !signatureInfo.err);
-  // console.log('last signature of 2000: ', allSignaturesInfos[allSignaturesInfos.length - 1]);
-  console.log('last signature of length: ', allSignaturesInfos.length);
+
+  // console.log('allSignaturesInfos: ', allSignaturesInfos[allSignaturesInfos.length - 1]);
 
   const tradeTransactions: web3.ParsedTransactionWithMeta[] = await getTradeTransactionsFromSignatures({
-    signatures: allSignaturesInfos.map((signatureInfo) => signatureInfo.signature),
+    signatures: allSignaturesInfos
+      .filter((signatureInfo) => signatureInfo)
+      .map((signatureInfo) => signatureInfo.signature),
     connection,
   });
 
   let allTradeActivities: TradeActivity[] = [];
   for (let tradeTxn of tradeTransactions) {
-    const tradeActivities = await parseTransactionInfoToTradeActivities({ tradeTxn, connection });
+    const tradeActivities = await parseTransactionInfoToTradeActivities({ tradeTxn, connection, programId });
     allTradeActivities = [...allTradeActivities, ...tradeActivities];
   }
 
@@ -81,9 +91,11 @@ export const getTradeActivities = async ({
 export const getTradeActivitiesBySignatures = async ({
   signatures,
   connection,
+  programId,
 }: {
   signatures: string[];
   connection: web3.Connection;
+  programId: web3.PublicKey;
 }): Promise<TradeActivity[]> => {
   const tradeTransactions: web3.ParsedTransactionWithMeta[] = await getTradeTransactionsFromSignatures({
     signatures,
@@ -92,7 +104,7 @@ export const getTradeActivitiesBySignatures = async ({
 
   let allTradeActivities: TradeActivity[] = [];
   for (let tradeTxn of tradeTransactions) {
-    const tradeActivities = await parseTransactionInfoToTradeActivities({ tradeTxn, connection });
+    const tradeActivities = await parseTransactionInfoToTradeActivities({ tradeTxn, connection, programId });
     allTradeActivities = [...allTradeActivities, ...tradeActivities];
   }
 
@@ -109,7 +121,6 @@ export const getTradeTransactionsFromSignatures = async ({
   const tradeTransactions: web3.ParsedTransactionWithMeta[] = [];
   let count = 0;
   for (let signature of signatures) {
-    console.log('processing signature: ', count++, ', of ', signatures.length);
     try {
       const currentTransactionInfo: web3.ParsedTransactionWithMeta | null = await connection.getParsedTransaction(
         signature,
@@ -139,9 +150,11 @@ const isTradeTransactionInfo = (currentTransactionInfo: web3.ParsedTransactionWi
 const parseTransactionInfoToTradeActivities = async ({
   tradeTxn,
   connection,
+  programId,
 }: {
   tradeTxn: web3.ParsedTransactionWithMeta;
   connection: web3.Connection;
+  programId: web3.PublicKey;
 }): Promise<TradeActivity[]> => {
   const tradeLogs: string[] = tradeTxn.meta?.logMessages?.reduce(
     (tradeLogs, log) => (isTradeInstructionLog(log) ? [...tradeLogs, log] : tradeLogs),
@@ -149,12 +162,21 @@ const parseTransactionInfoToTradeActivities = async ({
   ) as any;
 
   const innerInstructions: web3.ParsedInnerInstruction[] = tradeTxn.meta?.innerInstructions as any;
-  const programInstructions: web3.PartiallyDecodedInstruction[] = tradeTxn.transaction.message.instructions as any;
+  const programInstructions: web3.PartiallyDecodedInstruction[] = tradeTxn.transaction.message.instructions.filter(
+    (ix) =>
+      ix.programId.toBase58() !== 'ComputeBudget111111111111111111111111111111' &&
+      ix.programId.toBase58() === programId.toBase58(),
+  ) as any;
+  // console.log('innerInstructions: ', innerInstructions);
+  // console.log('programInstructions: ', programInstructions);
+
   const tradeActivities: TradeActivity[] = [];
+
   for (let i = 0; i < innerInstructions.length; i++) {
     const currentInnerInstruction = innerInstructions[i];
     const currentProgramInstruction = programInstructions[i];
     const currentLog = tradeLogs[i];
+
     const currentSignature = tradeTxn.transaction.signatures[0];
     const blockTime = tradeTxn.blockTime;
 

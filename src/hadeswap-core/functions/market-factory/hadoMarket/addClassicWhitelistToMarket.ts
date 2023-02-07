@@ -32,7 +32,7 @@ export const addClassicWhitelistToMarket: AddClassicWhitelistToMarket = async ({
   instructions.push(
     await program.methods
       .addClassicWhitelistToMarket(enumToAnchorEnum(args.whitelistType))
-      .accounts({
+      .accountsStrict({
         validationWhitelist: validationWhitelist.publicKey,
         hadoMarket: accounts.hadoMarket,
         user: accounts.userPubkey,

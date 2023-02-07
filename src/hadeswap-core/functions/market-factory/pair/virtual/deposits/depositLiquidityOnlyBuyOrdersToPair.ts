@@ -1,54 +1,55 @@
-import { web3 } from '@project-serum/anchor';
+import { BN, web3 } from '@project-serum/anchor';
+import { EMPTY_PUBKEY, ENCODER, SOL_FUNDS_PREFIX } from '../../../../../constants';
 
-import { enumToAnchorEnum, returnAnchorProgram } from '../../../../../helpers';
-import { EMPTY_PUBKEY, ENCODER, FEE_PREFIX, NFTS_OWNER_PREFIX, SOL_FUNDS_PREFIX } from '../../../../../constants';
-import { findAssociatedTokenAddress } from '../../../../../../common';
+import { returnAnchorProgram } from '../../../../../helpers';
 
-type WithdrawLiquidityOrderTokenizedFees = (params: {
+type DepositLiquidityOnlyBuyOrdersToPair = (params: {
   programId: web3.PublicKey;
   connection: web3.Connection;
 
+  args: {
+    amountOfOrders: number;
+  };
+
   accounts: {
     pair: web3.PublicKey;
-    lpTokenMint: web3.PublicKey;
-
+    authorityAdapter: web3.PublicKey;
     userPubkey: web3.PublicKey;
-    liquidityProvisionOrder: web3.PublicKey;
   };
 
   sendTxn: (transaction: web3.Transaction, signers: web3.Signer[]) => Promise<void>;
 }) => Promise<{ account: null; instructions: web3.TransactionInstruction[]; signers: web3.Signer[] }>;
 
-export const withdrawLiquidityOrderTokenizedFees: WithdrawLiquidityOrderTokenizedFees = async ({
+export const depositLiquidityOnlyBuyOrdersToPair: DepositLiquidityOnlyBuyOrdersToPair = async ({
   programId,
   connection,
   accounts,
+  args,
   sendTxn,
 }) => {
+  const encoder = new TextEncoder();
+
   const program = returnAnchorProgram(programId, connection);
   const instructions: web3.TransactionInstruction[] = [];
 
-  const [feeSolVault, feeVaultSeed] = await web3.PublicKey.findProgramAddress(
-    [ENCODER.encode(FEE_PREFIX), accounts.pair.toBuffer()],
+  const [solFundsVault, solVaultSeed] = await web3.PublicKey.findProgramAddress(
+    [encoder.encode(SOL_FUNDS_PREFIX), accounts.pair.toBuffer()],
     program.programId,
   );
-  const userNftTokenAccount = await findAssociatedTokenAddress(accounts.userPubkey, accounts.lpTokenMint);
 
   instructions.push(
     await program.methods
-      .withdrawLiquidityOrderTokenizedFees()
-      .accounts({
-        liquidityProvisionOrder: accounts.liquidityProvisionOrder,
+      .depositLiquidityOnlyBuyOrders(new BN(args.amountOfOrders))
+      .accountsStrict({
         pair: accounts.pair,
+        authorityAdapter: accounts.authorityAdapter,
         user: accounts.userPubkey,
-        feeSolVault: feeSolVault,
-        userLpTokenAccount: userNftTokenAccount,
+        fundsSolVault: solFundsVault,
         systemProgram: web3.SystemProgram.programId,
         rent: web3.SYSVAR_RENT_PUBKEY,
       })
       .instruction(),
   );
-
   const transaction = new web3.Transaction();
   for (let instruction of instructions) transaction.add(instruction);
 

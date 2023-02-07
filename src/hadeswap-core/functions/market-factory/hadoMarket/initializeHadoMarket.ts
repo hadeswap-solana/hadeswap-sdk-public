@@ -16,7 +16,7 @@ type InitializeHadoMarket = (params: {
   sendTxn: (transaction: web3.Transaction, signers: web3.Signer[]) => Promise<void>;
 }) => Promise<{ account: web3.PublicKey; instructions: web3.TransactionInstruction[]; signers: web3.Signer[] }>;
 
-export const initializeHadoMarket: InitializeHadoMarket = async ({ programId, connection, accounts, sendTxn }) => {
+export const initializeHadoMarket: InitializeHadoMarket = async ({ programId, connection, sendTxn, accounts }) => {
   const program = returnAnchorProgram(programId, connection);
   const instructions: web3.TransactionInstruction[] = [];
   const hadoMarket = web3.Keypair.generate();
@@ -24,7 +24,7 @@ export const initializeHadoMarket: InitializeHadoMarket = async ({ programId, co
   instructions.push(
     await program.methods
       .initializeHadoMarket()
-      .accounts({
+      .accountsStrict({
         hadoMarket: hadoMarket.publicKey,
         user: accounts.userPubkey,
 

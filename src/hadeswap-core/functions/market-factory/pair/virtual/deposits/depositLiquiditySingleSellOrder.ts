@@ -7,24 +7,26 @@ import {
   NFTS_OWNER_PREFIX,
   METADATA_PROGRAM_PUBKEY,
   SOL_FUNDS_PREFIX,
-  FEE_PREFIX,
   AUTHORIZATION_RULES_PROGRAM,
 } from '../../../../../constants';
 
 import {
+  anchorRawBNsAndPubkeysToNumsAndStrings,
   findRuleSetPDA,
   findTokenRecordPda,
   getMetaplexEditionPda,
-  getMetaplexMetadata,
   getMetaplexMetadataPda,
   returnAnchorProgram,
 } from '../../../../../helpers';
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata';
 
-type WithdrawLiquidityFromBalancedPair = (params: {
+type DepositLiquiditySingleSellOrder = (params: {
   programId: web3.PublicKey;
   connection: web3.Connection;
+
   args: {
+    proof?: Buffer[];
+
     pnft?: {
       nameForRuleSet?: string;
       payerRuleSet?: web3.PublicKey;
@@ -32,29 +34,33 @@ type WithdrawLiquidityFromBalancedPair = (params: {
   };
 
   accounts: {
+    nftValidationAdapter: web3.PublicKey;
+    nftValidationAdapterV2?: web3.PublicKey;
+
     pair: web3.PublicKey;
     authorityAdapter: web3.PublicKey;
     userPubkey: web3.PublicKey;
     nftMint: web3.PublicKey;
-    nftPairBox: web3.PublicKey;
   };
 
   sendTxn: (transaction: web3.Transaction, signers: web3.Signer[]) => Promise<void>;
-}) => Promise<{ account: null; instructions: web3.TransactionInstruction[]; signers: web3.Signer[] }>;
+}) => Promise<{
+  nftPairBox: web3.PublicKey;
+  instructions: web3.TransactionInstruction[];
+  signers: web3.Signer[];
+}>;
 
-// Virtual
-// at least 1 buy and 1 sell order
-export const withdrawLiquidityFromBalancedPair: WithdrawLiquidityFromBalancedPair = async ({
+export const depositLiquiditySingleSellOrder: DepositLiquiditySingleSellOrder = async ({
   programId,
   connection,
-  args,
   accounts,
+  args,
   sendTxn,
 }) => {
   const program = returnAnchorProgram(programId, connection);
   const instructions: web3.TransactionInstruction[] = [];
 
-  const [solFundsVault, solVaultSeed] = await web3.PublicKey.findProgramAddress(
+  const [fundsSolVault, solVaultSeed] = await web3.PublicKey.findProgramAddress(
     [ENCODER.encode(SOL_FUNDS_PREFIX), accounts.pair.toBuffer()],
     program.programId,
   );
@@ -63,68 +69,92 @@ export const withdrawLiquidityFromBalancedPair: WithdrawLiquidityFromBalancedPai
     program.programId,
   );
 
-  const [feeSolVault, feeVaultSeed] = await web3.PublicKey.findProgramAddress(
-    [ENCODER.encode(FEE_PREFIX), accounts.pair.toBuffer()],
-    program.programId,
-  );
+  const nftPairBox = web3.Keypair.generate();
 
   const userNftTokenAccount = await findAssociatedTokenAddress(accounts.userPubkey, accounts.nftMint);
   const vaultNftTokenAccount = await findAssociatedTokenAddress(nftsOwner, accounts.nftMint);
 
-  const editionId = getMetaplexEditionPda(accounts.nftMint);
-  const metadataInfo = getMetaplexMetadata(accounts.nftMint);
-  const ownerTokenRecord = findTokenRecordPda(accounts.nftMint, vaultNftTokenAccount);
-  const destTokenRecord = findTokenRecordPda(accounts.nftMint, userNftTokenAccount);
+  const metadataInfo = getMetaplexMetadataPda(accounts.nftMint);
+  const editionInfo = getMetaplexEditionPda(accounts.nftMint);
+  const ownerTokenRecord = findTokenRecordPda(accounts.nftMint, userNftTokenAccount);
+  const destTokenRecord = findTokenRecordPda(accounts.nftMint, vaultNftTokenAccount);
   const ruleSet = !args?.pnft
     ? METADATA_PROGRAM_PUBKEY
     : args?.pnft?.payerRuleSet && args?.pnft?.nameForRuleSet
     ? await findRuleSetPDA(args.pnft.payerRuleSet, args.pnft.nameForRuleSet)
     : (await Metadata.fromAccountAddress(connection, metadataInfo)).programmableConfig?.ruleSet;
   const modifyComputeUnits = web3.ComputeBudgetProgram.setComputeUnitLimit({
-    units: Math.round(400000),
+    units: Math.round(
+      400000,
+      // * (args.amountOfOrders / 10) + 1
+    ),
   });
   instructions.push(modifyComputeUnits);
+
   instructions.push(
     await program.methods
-      .withdrawLiquidityFromBalancedPair(null)
+      .depositLiquiditySingleSellToPair(args.proof ? args.proof : [], null)
       .accountsStrict({
-        nftPairBox: accounts.nftPairBox,
+        nftPairBox: nftPairBox.publicKey,
+        nftValidationAdapter: accounts.nftValidationAdapter,
+
         pair: accounts.pair,
         authorityAdapter: accounts.authorityAdapter,
         user: accounts.userPubkey,
-        fundsSolVault: solFundsVault,
-        feeSolVault: feeSolVault,
-        nftsOwner: nftsOwner,
-        nftMint: accounts.nftMint,
-        nftUserTokenAccount: userNftTokenAccount,
-        vaultNftTokenAccount: vaultNftTokenAccount,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: ASSOCIATED_PROGRAM_ID,
+        fundsSolVault: fundsSolVault,
 
         instructions: web3.SYSVAR_INSTRUCTIONS_PUBKEY,
         metadataInfo,
         ownerTokenRecord,
         destTokenRecord,
-        editionInfo: editionId,
+        editionInfo,
         authorizationRulesProgram: AUTHORIZATION_RULES_PROGRAM,
+
+        nftsOwner: nftsOwner,
+        nftMint: accounts.nftMint,
+        nftUserTokenAccount: userNftTokenAccount,
+
+        vaultTokenAccount: vaultNftTokenAccount,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_PROGRAM_ID,
+
+        metadataProgram: METADATA_PROGRAM_PUBKEY,
 
         systemProgram: web3.SystemProgram.programId,
         rent: web3.SYSVAR_RENT_PUBKEY,
-        metadataProgram: METADATA_PROGRAM_PUBKEY,
       })
-      .remainingAccounts([
-        {
-          pubkey: ruleSet || METADATA_PROGRAM_PUBKEY,
-          isSigner: false,
-          isWritable: false,
-        },
-      ])
+      .remainingAccounts(
+        accounts.nftValidationAdapterV2
+          ? [
+              {
+                pubkey: accounts.nftValidationAdapterV2,
+                isSigner: false,
+                isWritable: false,
+              },
+              {
+                pubkey: ruleSet || METADATA_PROGRAM_PUBKEY,
+                isSigner: false,
+                isWritable: false,
+              },
+            ]
+          : [
+              {
+                pubkey: ruleSet || METADATA_PROGRAM_PUBKEY,
+                isSigner: false,
+                isWritable: false,
+              },
+            ],
+      )
       .instruction(),
   );
   const transaction = new web3.Transaction();
   for (let instruction of instructions) transaction.add(instruction);
 
-  const signers = [];
+  const signers = [nftPairBox];
   await sendTxn(transaction, signers);
-  return { account: null, instructions, signers };
+  return {
+    nftPairBox: nftPairBox.publicKey,
+    instructions,
+    signers,
+  };
 };

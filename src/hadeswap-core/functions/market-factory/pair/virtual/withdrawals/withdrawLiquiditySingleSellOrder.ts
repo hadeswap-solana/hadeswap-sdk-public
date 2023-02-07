@@ -12,6 +12,7 @@ import {
 } from '../../../../../constants';
 
 import {
+  anchorRawBNsAndPubkeysToNumsAndStrings,
   findRuleSetPDA,
   findTokenRecordPda,
   getMetaplexEditionPda,
@@ -21,9 +22,10 @@ import {
 } from '../../../../../helpers';
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata';
 
-type WithdrawLiquidityFromBalancedPair = (params: {
+type WithdrawLiquiditySingleSellOrder = (params: {
   programId: web3.PublicKey;
   connection: web3.Connection;
+
   args: {
     pnft?: {
       nameForRuleSet?: string;
@@ -44,7 +46,7 @@ type WithdrawLiquidityFromBalancedPair = (params: {
 
 // Virtual
 // at least 1 buy and 1 sell order
-export const withdrawLiquidityFromBalancedPair: WithdrawLiquidityFromBalancedPair = async ({
+export const withdrawLiquiditySingleSellOrder: WithdrawLiquiditySingleSellOrder = async ({
   programId,
   connection,
   args,
@@ -68,11 +70,11 @@ export const withdrawLiquidityFromBalancedPair: WithdrawLiquidityFromBalancedPai
     program.programId,
   );
 
+  const editionInfo = getMetaplexEditionPda(accounts.nftMint);
+  const metadataInfo = getMetaplexMetadata(accounts.nftMint);
   const userNftTokenAccount = await findAssociatedTokenAddress(accounts.userPubkey, accounts.nftMint);
   const vaultNftTokenAccount = await findAssociatedTokenAddress(nftsOwner, accounts.nftMint);
 
-  const editionId = getMetaplexEditionPda(accounts.nftMint);
-  const metadataInfo = getMetaplexMetadata(accounts.nftMint);
   const ownerTokenRecord = findTokenRecordPda(accounts.nftMint, vaultNftTokenAccount);
   const destTokenRecord = findTokenRecordPda(accounts.nftMint, userNftTokenAccount);
   const ruleSet = !args?.pnft
@@ -84,16 +86,15 @@ export const withdrawLiquidityFromBalancedPair: WithdrawLiquidityFromBalancedPai
     units: Math.round(400000),
   });
   instructions.push(modifyComputeUnits);
-  instructions.push(
-    await program.methods
-      .withdrawLiquidityFromBalancedPair(null)
-      .accountsStrict({
+  console.log(
+    anchorRawBNsAndPubkeysToNumsAndStrings({
+      account: {
         nftPairBox: accounts.nftPairBox,
         pair: accounts.pair,
         authorityAdapter: accounts.authorityAdapter,
         user: accounts.userPubkey,
-        fundsSolVault: solFundsVault,
         feeSolVault: feeSolVault,
+        fundsSolVault: solFundsVault,
         nftsOwner: nftsOwner,
         nftMint: accounts.nftMint,
         nftUserTokenAccount: userNftTokenAccount,
@@ -105,7 +106,39 @@ export const withdrawLiquidityFromBalancedPair: WithdrawLiquidityFromBalancedPai
         metadataInfo,
         ownerTokenRecord,
         destTokenRecord,
-        editionInfo: editionId,
+        editionInfo,
+        authorizationRulesProgram: AUTHORIZATION_RULES_PROGRAM,
+
+        systemProgram: web3.SystemProgram.programId,
+        rent: web3.SYSVAR_RENT_PUBKEY,
+        metadataProgram: METADATA_PROGRAM_PUBKEY,
+        ruleSet,
+      },
+      publicKey: userNftTokenAccount,
+    }),
+  );
+  instructions.push(
+    await program.methods
+      .withdrawLiquiditySingleSellOrder(null)
+      .accountsStrict({
+        nftPairBox: accounts.nftPairBox,
+        pair: accounts.pair,
+        authorityAdapter: accounts.authorityAdapter,
+        user: accounts.userPubkey,
+        feeSolVault: feeSolVault,
+        fundsSolVault: solFundsVault,
+        nftsOwner: nftsOwner,
+        nftMint: accounts.nftMint,
+        nftUserTokenAccount: userNftTokenAccount,
+        vaultNftTokenAccount: vaultNftTokenAccount,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_PROGRAM_ID,
+
+        instructions: web3.SYSVAR_INSTRUCTIONS_PUBKEY,
+        metadataInfo,
+        ownerTokenRecord,
+        destTokenRecord,
+        editionInfo,
         authorizationRulesProgram: AUTHORIZATION_RULES_PROGRAM,
 
         systemProgram: web3.SystemProgram.programId,

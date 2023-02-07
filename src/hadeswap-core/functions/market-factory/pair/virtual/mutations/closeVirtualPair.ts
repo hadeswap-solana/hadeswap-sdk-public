@@ -33,7 +33,7 @@ export const closeVirtualPair: CloseVirtualPair = async ({ programId, connection
   instructions.push(
     await program.methods
       .closeVirtualNftSwapPair()
-      .accounts({
+      .accountsStrict({
         pair: accounts.pair,
         authorityAdapter: accounts.authorityAdapter,
         user: accounts.userPubkey,

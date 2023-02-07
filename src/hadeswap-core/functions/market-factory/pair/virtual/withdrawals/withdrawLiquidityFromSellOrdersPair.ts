@@ -8,9 +8,16 @@ import {
   METADATA_PROGRAM_PUBKEY,
   SOL_FUNDS_PREFIX,
   FEE_PREFIX,
+  AUTHORIZATION_RULES_PROGRAM,
 } from '../../../../../constants';
 
-import { getMetaplexMetadataPda, returnAnchorProgram } from '../../../../../helpers';
+import {
+  findTokenRecordPda,
+  getMetaplexEditionPda,
+  getMetaplexMetadata,
+  getMetaplexMetadataPda,
+  returnAnchorProgram,
+} from '../../../../../helpers';
 
 type WithdrawLiquidityFromSellOrdersPair = (params: {
   programId: web3.PublicKey;
@@ -60,10 +67,23 @@ export const withdrawLiquidityFromSellOrdersPair: WithdrawLiquidityFromSellOrder
   );
   const vaultNftTokenAccountSecond = await findAssociatedTokenAddress(nftsOwner, accounts.nftMintSecond);
 
+  const editionInfoFirst = getMetaplexEditionPda(accounts.nftMintFirst);
+  const metadataInfoFirst = getMetaplexMetadata(accounts.nftMintFirst);
+  const ownerTokenRecordFirst = findTokenRecordPda(accounts.nftMintFirst, vaultNftTokenAccountFirst);
+  const destTokenRecordFirst = findTokenRecordPda(accounts.nftMintFirst, userNftTokenAccountFirst);
+
+  const editionInfoSecond = getMetaplexEditionPda(accounts.nftMintSecond);
+  const metadataInfoSecond = getMetaplexMetadata(accounts.nftMintSecond);
+  const ownerTokenRecordSecond = findTokenRecordPda(accounts.nftMintSecond, vaultNftTokenAccountSecond);
+  const destTokenRecordSecond = findTokenRecordPda(accounts.nftMintSecond, userNftTokenAccountNftMintSecond);
+  const modifyComputeUnits = web3.ComputeBudgetProgram.setComputeUnitLimit({
+    units: Math.round(400000),
+  });
+  instructions.push(modifyComputeUnits);
   instructions.push(
     await program.methods
       .withdrawLiquidityFromSellOrdersPair()
-      .accounts({
+      .accountsStrict({
         pair: accounts.pair,
         authorityAdapter: accounts.authorityAdapter,
         user: accounts.userPubkey,
@@ -84,8 +104,20 @@ export const withdrawLiquidityFromSellOrdersPair: WithdrawLiquidityFromSellOrder
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_PROGRAM_ID,
 
+        instructions: web3.SYSVAR_INSTRUCTIONS_PUBKEY,
+        metadataInfoFirst,
+        ownerTokenRecordFirst,
+        destTokenRecordFirst,
+        editionInfoFirst,
+        metadataInfoSecond,
+        ownerTokenRecordSecond,
+        destTokenRecordSecond,
+        editionInfoSecond,
+        authorizationRulesProgram: AUTHORIZATION_RULES_PROGRAM,
+
         systemProgram: web3.SystemProgram.programId,
         rent: web3.SYSVAR_RENT_PUBKEY,
+        metadataProgram: METADATA_PROGRAM_PUBKEY,
       })
       .instruction(),
   );

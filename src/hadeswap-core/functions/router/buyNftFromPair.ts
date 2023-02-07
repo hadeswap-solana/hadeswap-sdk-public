@@ -1,9 +1,26 @@
 import { BN, web3 } from '@project-serum/anchor';
 import { ASSOCIATED_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@project-serum/anchor/dist/cjs/utils/token';
 import { findAssociatedTokenAddress } from '../../../common';
-import { EMPTY_PUBKEY, ENCODER, FEE_PREFIX, NFTS_OWNER_PREFIX, SOL_FUNDS_PREFIX } from '../../constants';
+import {
+  AUTHORIZATION_RULES_PROGRAM,
+  EMPTY_PUBKEY,
+  ENCODER,
+  FEE_PREFIX,
+  METADATA_PROGRAM_PUBKEY,
+  NFTS_OWNER_PREFIX,
+  SOL_FUNDS_PREFIX,
+} from '../../constants';
 
-import { returnAnchorProgram } from '../../helpers';
+import {
+  anchorRawBNsAndPubkeysToNumsAndStrings,
+  findRuleSetPDA,
+  findTokenRecordPda,
+  getMetaplexEditionPda,
+  getMetaplexMetadata,
+  returnAnchorProgram,
+} from '../../helpers';
+import { Metadata } from '@metaplex-foundation/mpl-token-metadata';
+// import { Metadata } from '@metaplex-foundation/mpl-token-metadata';
 
 type BuyNftFromPair = (params: {
   programId: web3.PublicKey;
@@ -12,6 +29,11 @@ type BuyNftFromPair = (params: {
   args: {
     maxAmountToPay: number;
     skipFailed: boolean;
+
+    pnft?: {
+      nameForRuleSet?: string;
+      payerRuleSet?: web3.PublicKey;
+    };
   };
 
   accounts: {
@@ -47,11 +69,23 @@ export const buyNftFromPair: BuyNftFromPair = async ({ programId, connection, ac
   );
 
   const userNftTokenAccount = await findAssociatedTokenAddress(accounts.userPubkey, accounts.nftMint);
+  const ownerTokenRecord = findTokenRecordPda(accounts.nftMint, accounts.vaultNftTokenAccount);
+  const destTokenRecord = findTokenRecordPda(accounts.nftMint, userNftTokenAccount);
+  const editionInfo = getMetaplexEditionPda(accounts.nftMint);
+  const metadataInfo = getMetaplexMetadata(accounts.nftMint);
+  const ruleSet = !args?.pnft
+    ? METADATA_PROGRAM_PUBKEY
+    : args?.pnft?.payerRuleSet && args?.pnft?.nameForRuleSet
+    ? await findRuleSetPDA(args.pnft.payerRuleSet, args.pnft.nameForRuleSet)
+    : (await Metadata.fromAccountAddress(connection, metadataInfo)).programmableConfig?.ruleSet;
 
-  instructions.push(
-    await program.methods
-      .buyNftFromPair(new BN(args.maxAmountToPay), args.skipFailed)
-      .accounts({
+  const modifyComputeUnits = web3.ComputeBudgetProgram.setComputeUnitLimit({
+    units: Math.round(400000),
+  });
+  instructions.push(modifyComputeUnits);
+  console.log(
+    anchorRawBNsAndPubkeysToNumsAndStrings({
+      account: {
         nftPairBox: accounts.nftPairBox,
 
         pair: accounts.pair,
@@ -71,9 +105,62 @@ export const buyNftFromPair: BuyNftFromPair = async ({ programId, connection, ac
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_PROGRAM_ID,
 
+        instructions: web3.SYSVAR_INSTRUCTIONS_PUBKEY,
+        metadataInfo,
+        ownerTokenRecord,
+        destTokenRecord,
+        editionInfo,
+        authorizationRulesProgram: AUTHORIZATION_RULES_PROGRAM,
+        metadataProgram: METADATA_PROGRAM_PUBKEY,
+
         systemProgram: web3.SystemProgram.programId,
         rent: web3.SYSVAR_RENT_PUBKEY,
+        ruleSet,
+      },
+      publicKey: userNftTokenAccount,
+    }),
+  );
+  instructions.push(
+    await program.methods
+      .buyNftFromPair(new BN(args.maxAmountToPay), args.skipFailed, null)
+      .accountsStrict({
+        nftPairBox: accounts.nftPairBox,
+
+        pair: accounts.pair,
+        user: accounts.userPubkey,
+
+        fundsSolVault: solFundsVault,
+        nftsOwner: nftsOwner,
+        feeSolVault: feeSolVault,
+
+        nftMint: accounts.nftMint,
+        vaultNftTokenAccount: accounts.vaultNftTokenAccount,
+
+        nftUserTokenAccount: userNftTokenAccount,
+        assetReceiver: accounts.assetReceiver,
+        protocolFeeReceiver: accounts.protocolFeeReceiver,
+
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_PROGRAM_ID,
+
+        instructions: web3.SYSVAR_INSTRUCTIONS_PUBKEY,
+        metadataInfo,
+        ownerTokenRecord,
+        destTokenRecord,
+        editionInfo,
+        authorizationRulesProgram: AUTHORIZATION_RULES_PROGRAM,
+
+        systemProgram: web3.SystemProgram.programId,
+        rent: web3.SYSVAR_RENT_PUBKEY,
+        metadataProgram: METADATA_PROGRAM_PUBKEY,
       })
+      .remainingAccounts([
+        {
+          pubkey: ruleSet || METADATA_PROGRAM_PUBKEY,
+          isSigner: false,
+          isWritable: false,
+        },
+      ])
       .instruction(),
   );
   const transaction = new web3.Transaction();

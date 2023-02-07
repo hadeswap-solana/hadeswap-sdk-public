@@ -46,7 +46,7 @@ export const withdrawSolFromPair: WithdrawSolFromPair = async ({ programId, conn
   instructions.push(
     await program.methods
       .withdrawSolFromPair(new BN(args.amountOfOrders))
-      .accounts({
+      .accountsStrict({
         pair: accounts.pair,
         authorityAdapter: accounts.authorityAdapter,
         user: accounts.userPubkey,

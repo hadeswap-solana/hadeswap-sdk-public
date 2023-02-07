@@ -49,7 +49,7 @@ export const modifyPair: ModifyPair = async ({ programId, connection, args, acco
         spotPrice: new BN(args.spotPrice),
         fee: new BN(args.fee),
       })
-      .accounts({
+      .accountsStrict({
         pair: accounts.pair,
         authorityAdapter: accounts.authorityAdapter,
         user: accounts.userPubkey,

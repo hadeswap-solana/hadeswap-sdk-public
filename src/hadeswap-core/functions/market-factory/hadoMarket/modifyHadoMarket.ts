@@ -24,7 +24,7 @@ export const modifyHadoMarket: ModifyHadoMarket = async ({ programId, connection
   instructions.push(
     await program.methods
       .modifyHadoMarket()
-      .accounts({
+      .accountsStrict({
         hadoMarket: accounts.hadoMarket,
         user: accounts.userPubkey,
         validationAdapterProgram: accounts.validationAdapterAuthority,

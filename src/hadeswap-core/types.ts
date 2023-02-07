@@ -1,7 +1,7 @@
 export enum BondingCurveType {
   Linear = 'linear',
   Exponential = 'exponential',
-  XYK = "xyk",
+  XYK = 'xyk',
 }
 
 export enum PairType {

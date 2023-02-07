@@ -3,10 +3,12 @@ import { Program, AnchorProvider, web3, BN, utils, Idl } from '@project-serum/an
 import { Hadeswap, IDL } from './idl/hadeswap';
 
 import { createFakeWallet } from '../common';
-import { BASE_POINTS, EDITION_PREFIX, METADATA_PREFIX, METADATA_PROGRAM_PUBKEY } from './constants';
+import { BASE_POINTS, EDITION_PREFIX, METADATA_PREFIX, METADATA_PROGRAM_PUBKEY, TOKEN_RECORD } from './constants';
 
 import { BondingCurveType, OrderType } from './types';
 import { PublicKey } from '@solana/web3.js';
+
+export const AUTHORIZATION_RULES_PROGRAM = new web3.PublicKey('auth9SigNpDKz4sJJ1DfCTuZrZNSAgh9sFD3rboVmgg');
 
 type ReturnAnchorProgram = (programId: web3.PublicKey, connection: web3.Connection) => Program<Hadeswap>;
 export const returnAnchorProgram: ReturnAnchorProgram = (programId, connection) =>
@@ -115,14 +117,75 @@ export const calculateNextSpotPrice = ({
 
     return spotPrice * Math.pow(newDelta, Math.abs(newCounter));
   } else if (bondingCurveType === BondingCurveType.XYK) {
-    const currentDelta = delta - counter;
-    const diffAmount = (counter * spotPrice) / currentDelta;
-    const newSpotPrice = spotPrice + diffAmount;
+    // const deltaCorrected = delta - counter;
 
-    return orderType === OrderType.Buy ? newSpotPrice / (currentDelta - 1) : newSpotPrice / (currentDelta + 1);
+    const nftTokensBalance = delta * spotPrice;
+    const counterUpdated = orderType === OrderType.Buy ? counter : counter - 1;
+    const currentDelta = delta + 1 - counterUpdated;
+    const diffAmount = (counterUpdated * nftTokensBalance) / currentDelta;
+    const newNftTokensBalance = nftTokensBalance + diffAmount;
+
+    return orderType === OrderType.Buy
+      ? newNftTokensBalance / (currentDelta - 1)
+      : newNftTokensBalance / (currentDelta + 1);
   }
   return 0;
 };
+
+export const deriveXykBaseSpotPriceFromCurrentSpotPrice = ({
+  currentSpotPrice,
+  delta,
+  counter,
+}: {
+  currentSpotPrice: number;
+  delta: number;
+  counter: number;
+}) => {
+  if (delta === 0) {
+    return currentSpotPrice;
+  }
+  const correctedCounter = counter - 1;
+  const deltaCorrected = delta - correctedCounter;
+
+  return (currentSpotPrice * deltaCorrected) / (delta + (correctedCounter * delta) / (deltaCorrected + 1));
+};
+
+// export const deriveXykBaseSpotPriceFromCurrentSpotPrice = ({
+//   orderType,
+//   currentSpotPrice,
+//   delta,
+//   counter,
+// }: {
+//   orderType: OrderType;
+//   currentSpotPrice: number;
+//   delta: number;
+//   counter: number;
+// }) => {
+//   // const counterUpdated = counter;
+//   // const currentDelta = delta + 1 - counterUpdated; // const nftTokensBalance = delta * spotPrice;
+//   // const newNftTokensBalance = currentSpotPrice * (currentDelta - 1);
+//   //-->
+//   // const nftTokensBalance = currentSpotPrice / delta;
+//   // const counterUpdated = counter;
+//   // const currentDelta = delta + counterUpdated;
+//   // const diffAmount = (counterUpdated / nftTokensBalance) * currentDelta;
+//   // const newNftTokensBalance = nftTokensBalance - diffAmount;
+
+//   // console.log({ newNftTokensBalance, diffAmount, currentDelta, counterUpdated, nftTokensBalance });
+//   // return newNftTokensBalance * (currentDelta + 2);
+//   // -->
+
+//   const nftTokensBalance = currentSpotPrice / delta;
+//   const counterUpdated = orderType === OrderType.Buy ? counter : counter - 1;
+//   const currentDelta = delta - 1 + counterUpdated;
+//   const diffAmount = (counterUpdated / nftTokensBalance) * currentDelta;
+//   const newNftTokensBalance = nftTokensBalance - diffAmount;
+//   console.log({ newNftTokensBalance, diffAmount, currentDelta, counterUpdated, nftTokensBalance });
+
+//   return orderType === OrderType.Buy
+//     ? newNftTokensBalance * (currentDelta + 1)
+//     : newNftTokensBalance * (currentDelta - 1);
+// };
 
 export const getSumOfOrdersSeries = ({
   amountOfOrders,
@@ -196,7 +259,7 @@ export const calculatePricesArray = ({
   counter: number;
 }) => {
   const array: any = [];
-  let newCounter = counter;
+  let newCounter = orderType === OrderType.Sell ? counter + 1 : counter;
 
   for (let i = 0; i < amount; i++) {
     const next_price = calculateNextSpotPrice({
@@ -214,4 +277,34 @@ export const calculatePricesArray = ({
   const total = array.reduce((acc, price) => acc + price, 0);
 
   return { array, total };
+};
+
+export const getMetaplexMetadata = (mintPubkey: web3.PublicKey) => {
+  const [metadata] = web3.PublicKey.findProgramAddressSync(
+    [Buffer.from(METADATA_PREFIX), METADATA_PROGRAM_PUBKEY.toBuffer(), mintPubkey.toBuffer()],
+    METADATA_PROGRAM_PUBKEY,
+  );
+  return metadata;
+};
+
+export const findTokenRecordPda = (mint: web3.PublicKey, token: web3.PublicKey) => {
+  return web3.PublicKey.findProgramAddressSync(
+    [
+      Buffer.from(METADATA_PREFIX),
+      METADATA_PROGRAM_PUBKEY.toBuffer(),
+      mint.toBuffer(),
+      Buffer.from(TOKEN_RECORD),
+      token.toBuffer(),
+    ],
+    METADATA_PROGRAM_PUBKEY,
+  )[0];
+};
+
+export const findRuleSetPDA = async (payer: web3.PublicKey, name: string) => {
+  return (
+    await web3.PublicKey.findProgramAddress(
+      [Buffer.from('rule_set'), payer.toBuffer(), Buffer.from(name)],
+      AUTHORIZATION_RULES_PROGRAM,
+    )
+  )[0];
 };

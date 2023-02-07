@@ -21,7 +21,7 @@ export const validateNft: ValidateNft = async ({ programId, connection, accounts
   instructions.push(
     await program.methods
       .validateNft()
-      .accounts({
+      .accountsStrict({
         nftValidationAdapter: nftValidationAdapter.publicKey,
         validationWhitelist: accounts.classicValidationWhitelist,
         user: accounts.userPubkey,

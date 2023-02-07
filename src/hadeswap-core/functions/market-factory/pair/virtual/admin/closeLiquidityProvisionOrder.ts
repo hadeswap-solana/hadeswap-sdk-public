@@ -27,7 +27,7 @@ export const closeLiquidityProvisionOrder: CloseLiquidityProvisionOrder = async 
   instructions.push(
     await program.methods
       .closeLiquidityProvisionOrder()
-      .accounts({
+      .accountsStrict({
         liquidityProvisionOrder: accounts.liquidityProvisionOrder,
         admin: accounts.admin,
       })

@@ -22,7 +22,7 @@ export const closeNftPairBox: CloseNftPairBox = async ({ programId, connection, 
   instructions.push(
     await program.methods
       .closeNftPairBox()
-      .accounts({
+      .accountsStrict({
         nftPairBox: accounts.nftPairBox,
         admin: accounts.admin,
       })

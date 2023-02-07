@@ -30,11 +30,14 @@ export const withdrawLiquidityOrderVirtualFees: WithdrawLiquidityOrderVirtualFee
     [ENCODER.encode(FEE_PREFIX), accounts.pair.toBuffer()],
     program.programId,
   );
-
+  const modifyComputeUnits = web3.ComputeBudgetProgram.setComputeUnitLimit({
+    units: Math.round(400000),
+  });
+  instructions.push(modifyComputeUnits);
   instructions.push(
     await program.methods
       .withdrawLiquidityOrderVirtualFees()
-      .accounts({
+      .accountsStrict({
         liquidityProvisionOrder: accounts.liquidityProvisionOrder,
         pair: accounts.pair,
         authorityAdapter: accounts.authorityAdapter,
