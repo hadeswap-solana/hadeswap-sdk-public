@@ -18,6 +18,7 @@ import {
   returnAnchorProgram,
 } from '../../helpers';
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata';
+import { AccountMeta } from '@solana/web3.js';
 
 type SellNftToTokenToNftPair = (params: {
   programId: web3.PublicKey;
@@ -69,11 +70,25 @@ export const sellNftToTokenToNftPair: SellNftToTokenToNftPair = async ({
   const destTokenRecord = findTokenRecordPda(accounts.nftMint, assetReceiverTokenAccount);
   const editionInfo = getMetaplexEditionPda(accounts.nftMint);
   const metadataInfo = getMetaplexMetadataPda(accounts.nftMint);
+  const metadataAccount = await Metadata.fromAccountAddress(connection, metadataInfo);
+
   const ruleSet = !args?.pnft
     ? METADATA_PROGRAM_PUBKEY
     : args?.pnft?.payerRuleSet && args?.pnft?.nameForRuleSet
     ? await findRuleSetPDA(args.pnft.payerRuleSet, args.pnft.nameForRuleSet)
-    : (await Metadata.fromAccountAddress(connection, metadataInfo)).programmableConfig?.ruleSet;
+    : metadataAccount.programmableConfig?.ruleSet;
+
+  const creators = metadataAccount.data.creators;
+
+  const creatorAccountMetas: AccountMeta[] = creators
+    ? creators
+        ?.filter((creator) => creator.share > 0)
+        .map((creator) => ({
+          pubkey: creator.address,
+          isSigner: false,
+          isWritable: true,
+        }))
+    : [];
   const modifyComputeUnits = web3.ComputeBudgetProgram.setComputeUnitLimit({
     units: Math.round(400000),
   });
@@ -121,6 +136,7 @@ export const sellNftToTokenToNftPair: SellNftToTokenToNftPair = async ({
                 isSigner: false,
                 isWritable: false,
               },
+              ...creatorAccountMetas,
             ]
           : [
               {
@@ -128,6 +144,7 @@ export const sellNftToTokenToNftPair: SellNftToTokenToNftPair = async ({
                 isSigner: false,
                 isWritable: false,
               },
+              ...creatorAccountMetas,
             ],
       )
       .instruction(),

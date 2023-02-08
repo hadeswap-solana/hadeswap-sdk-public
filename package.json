@@ -1,6 +1,6 @@
 {
   "name": "hadeswap-sdk-public",
-  "version": "0.7.12-beta.27",
+  "version": "0.8.0",
   "description": "HadeSwap SDK for interacting with protocol",
   "keywords": [
     "Frakt",
