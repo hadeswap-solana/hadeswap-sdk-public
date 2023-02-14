@@ -147,7 +147,7 @@ const isTradeTransactionInfo = (currentTransactionInfo: web3.ParsedTransactionWi
   return currentTransactionInfo.meta?.logMessages?.find(isTradeInstructionLog) !== undefined;
 };
 
-const parseTransactionInfoToTradeActivities = async ({
+export const parseTransactionInfoToTradeActivities = async ({
   tradeTxn,
   connection,
   programId,
